@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Family Film Journal - Curated film recommendations and viewing guides for parents of 6-12 year olds. Cinema that sparks family conversations.">
+    <title>Family Film Journal | Cinema that sparks family conversations</title>
+    
+    <!-- Preconnect for fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-ink: #1a1a1a;
+            --color-paper: #faf8f5;
+            --color-accent: #8b4513;
+            --color-accent-light: #d4a574;
+            --color-muted: #6b6b6b;
+            --color-border: #e0dcd5;
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            --max-width: 680px;
+            --spacing-unit: 1.5rem;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1000;
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+            outline: 3px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
+        /* Focus styles for accessibility */
+        :focus-visible {
+            outline: 3px solid var(--color-accent);
+            outline-offset: 3px;
+        }
+
+        /* Header */
+        header {
+            padding: calc(var(--spacing-unit) * 3) var(--spacing-unit) calc(var(--spacing-unit) * 2);
+            text-align: center;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .site-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--color-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
+            width: 100%;
+        }
+
+        section {
+            margin-bottom: calc(var(--spacing-unit) * 2.5);
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-ink);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 2.5rem;
+            height: 2px;
+            background-color: var(--color-accent);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Feature list */
+        .features {
+            display: grid;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature {
+            background: white;
+            padding: 1.25rem 1.5rem;
+            border-left: 3px solid var(--color-accent-light);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.35rem;
+            color: var(--color-ink);
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+        }
+
+        /* Status badge */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border: 1px solid var(--color-border);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            margin-top: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Accessibility section */
+        .accessibility-commitment {
+            background: linear-gradient(135deg, #f5f3f0 0%, #faf8f5 100%);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .accessibility-commitment p {
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--color-border);
+            padding: calc(var(--spacing-unit) * 1.5) var(--spacing-unit);
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .creator {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .creator-name {
+            color: var(--color-ink);
+            font-weight: 500;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--color-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+
+            header {
+                padding: calc(var(--spacing-unit) * 2) var(--spacing-unit) var(--spacing-unit);
+            }
+
+            .feature {
+                padding: 1rem 1.25rem;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            
+            .status-dot {
+                animation: none;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --color-muted: #4a4a4a;
+                --color-border: #999;
+            }
+            
+            .feature {
+                border-left-width: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header role="banner">
+        <h1 class="site-title">Family Film Journal</h1>
+        <p class="tagline">Cinema that sparks family conversations</p>
+        <p class="subtitle">Curated film recommendations and viewing guides for parents of 6–12 year olds — helping you share great cinema with context, not caution.</p>
+    </header>
+
+    <main id="main-content" role="main">
+        <section aria-labelledby="about-heading">
+            <h2 id="about-heading">About This Project</h2>
+            <p>Family Film Journal is an editorial platform dedicated to helping parents discover films worth sharing with their children. We believe that great cinema — films crafted with care in their visuals, sound, rhythm, and storytelling — can be a powerful catalyst for family connection and young minds.</p>
+            <p>Rather than simply flagging content warnings, we provide thoughtful context: the background, themes, and conversation starters that transform passive viewing into engaged discovery. Our recommendations span animation, world cinema, classics, and contemporary films — chosen for their artistic merit and potential to spark meaningful dialogue.</p>
+        </section>
+
+        <section aria-labelledby="features-heading">
+            <h2 id="features-heading">What's Coming</h2>
+            <div class="features" role="list">
+                <article class="feature" role="listitem">
+                    <h3 class="feature-title">Curated Film Reviews</h3>
+                    <p class="feature-desc">In-depth reviews examining craft, story, and themes — with age-specific guidance and discussion prompts for families.</p>
+                </article>
+                <article class="feature" role="listitem">
+                    <h3 class="feature-title">Viewing Guides</h3>
+                    <p class="feature-desc">Background context parents can share before or during films — historical settings, artistic techniques, cultural notes.</p>
+                </article>
+                <article class="feature" role="listitem">
+                    <h3 class="feature-title">Conversation Starters</h3>
+                    <p class="feature-desc">Thoughtful questions to explore after watching — helping families process themes together without lecturing.</p>
+                </article>
+                <article class="feature" role="listitem">
+                    <h3 class="feature-title">Age-Aware Collections</h3>
+                    <p class="feature-desc">Thematic film lists organised by age readiness and interest — from first studio ghibli to gateway world cinema.</p>
+                </article>
+            </div>
+            <p class="status" role="status">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>In development — launching 2025</span>
+            </p>
+        </section>
+
+        <section aria-labelledby="accessibility-heading">
+            <h2 id="accessibility-heading">Accessibility</h2>
+            <div class="accessibility-commitment">
+                <p>Family Film Journal is committed to digital accessibility. This site is designed to meet WCAG 2.1 AA standards, with semantic HTML, keyboard navigation, screen reader support, and respect for user preferences including reduced motion and high contrast modes.</p>
+                <p>If you encounter any accessibility barriers, please contact us so we can improve.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        <p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
+        <p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
+    </footer>
+</body>
+</html>
