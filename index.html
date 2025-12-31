@@ -276,6 +276,205 @@
                 border-left-width: 4px;
             }
         }
+    
+        /* Navigation */
+        .site-nav {
+            margin-top: calc(var(--spacing-unit) * 1.5);
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .site-nav a {
+            text-decoration: none;
+            color: var(--color-muted);
+            font-weight: 600;
+            padding: 0.4rem 0.75rem;
+            border-radius: 999px;
+        }
+
+        .site-nav a:hover {
+            color: var(--color-ink);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .site-nav a:focus-visible {
+            outline: 3px solid var(--color-accent);
+            outline-offset: 3px;
+        }
+
+        .site-nav .nav-muted {
+            opacity: 0.7;
+        }
+
+        /* Shelves (BFI/MUBI-style rows) */
+        .shelf {
+            margin: 0 0 calc(var(--spacing-unit) * 3);
+        }
+
+        .shelf__head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .shelf__head h2 {
+            margin: 0;
+        }
+
+        .shelf__link {
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+            color: var(--color-muted);
+        }
+
+        .shelf__link:hover {
+            color: var(--color-ink);
+        }
+
+        .shelf__link:focus-visible {
+            outline: 3px solid var(--color-accent);
+            outline-offset: 4px;
+            border-bottom-color: transparent;
+        }
+
+        .shelf__rail {
+            overflow-x: auto;
+            overflow-y: visible;
+            scroll-snap-type: x mandatory;
+            padding: 0.25rem 0 2.75rem; /* room for peek panel */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .shelf__list {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(180px, 220px);
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card {
+            position: relative;
+            scroll-snap-align: start;
+        }
+
+        .card a.card__link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 18px;
+        }
+
+        .card a.card__link:focus-visible {
+            outline: 3px solid var(--color-accent);
+            outline-offset: 4px;
+        }
+
+        .poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            border-radius: 18px;
+            border: 1px solid var(--color-border);
+            background: #f2f2f2;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .poster--placeholder::after {
+            content: "Poster";
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            color: var(--color-muted);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .meta {
+            margin-top: 0.6rem;
+        }
+
+        .title {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .year {
+            color: var(--color-muted);
+            font-size: 0.95rem;
+            min-height: 1.2em;
+        }
+
+        .peek {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 0.5rem);
+            border: 1px solid var(--color-border);
+            border-radius: 18px;
+            background: var(--color-paper);
+            padding: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            opacity: 0;
+            transform: translateY(-6px);
+            pointer-events: none;
+            transition: opacity 160ms ease, transform 160ms ease;
+        }
+
+        /* Show peek on hover/focus (desktop + keyboard) */
+        @media (hover: hover) {
+            .card:hover .peek {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+        }
+
+        .card:focus-within .peek {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .peek { transition: none; }
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+
+        .badge {
+            border: 1px solid var(--color-border);
+            border-radius: 999px;
+            padding: 0.2rem 0.55rem;
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        /* Reduce peek complexity on touch devices */
+        @media (hover: none) {
+            .peek { display: none; }
+            .shelf__rail { padding-bottom: 0.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -285,39 +484,62 @@
         <h1 class="site-title">Family Film Journal</h1>
         <p class="tagline">Cinema that sparks family conversations</p>
         <p class="subtitle">Curated film recommendations and viewing guides for parents of 6–12 year olds — helping you share great cinema with context, not caution.</p>
+
+        <nav class="site-nav" aria-label="Primary">
+            <a href="/films/">Films</a>
+            <a href="/collections/">Collections</a>
+            <a href="/about/">About</a>
+            <a href="#search" class="nav-muted" title="Search coming soon" aria-label="Search (coming soon)">Search</a>
+        </nav>
     </header>
 
-    <main id="main-content" role="main">
+        
+        <main id="main-content" role="main">
+        <section class="shelf" aria-labelledby="shelf-new">
+            <div class="shelf__head">
+                <h2 id="shelf-new">New on the Journal</h2>
+                <a class="shelf__link" href="/films/">See all</a>
+            </div>
+            <div class="shelf__rail" data-rail>
+                <ul class="shelf__list" role="list" id="rail-new"></ul>
+            </div>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-animation">
+            <div class="shelf__head">
+                <h2 id="shelf-animation">Animation classics</h2>
+                <a class="shelf__link" href="/collections/animation-classics/">See all</a>
+            </div>
+            <div class="shelf__rail" data-rail>
+                <ul class="shelf__list" role="list" id="rail-animation"></ul>
+            </div>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-planet">
+            <div class="shelf__head">
+                <h2 id="shelf-planet">Nature, environment &amp; the future of our planet</h2>
+                <a class="shelf__link" href="/collections/planet-and-tomorrow/">See all</a>
+            </div>
+            <div class="shelf__rail" data-rail>
+                <ul class="shelf__list" role="list" id="rail-planet"></ul>
+            </div>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-adult">
+            <div class="shelf__head">
+                <h2 id="shelf-adult">Adult classics kids can join</h2>
+                <a class="shelf__link" href="/collections/adult-classics-with-kids/">See all</a>
+            </div>
+            <div class="shelf__rail" data-rail>
+                <ul class="shelf__list" role="list" id="rail-adult"></ul>
+            </div>
+        </section>
+
+
         <section aria-labelledby="about-heading">
             <h2 id="about-heading">About This Project</h2>
             <p>Family Film Journal is an editorial platform dedicated to helping parents discover films worth sharing with their children. We believe that great cinema — films crafted with care in their visuals, sound, rhythm, and storytelling — can be a powerful catalyst for family connection and young minds.</p>
             <p>Rather than simply flagging content warnings, we provide thoughtful context: the background, themes, and conversation starters that transform passive viewing into engaged discovery. Our recommendations span animation, world cinema, classics, and contemporary films — chosen for their artistic merit and potential to spark meaningful dialogue.</p>
-        </section>
-
-        <section aria-labelledby="features-heading">
-            <h2 id="features-heading">What's Coming</h2>
-            <div class="features" role="list">
-                <article class="feature" role="listitem">
-                    <h3 class="feature-title">Curated Film Reviews</h3>
-                    <p class="feature-desc">In-depth reviews examining craft, story, and themes — with age-specific guidance and discussion prompts for families.</p>
-                </article>
-                <article class="feature" role="listitem">
-                    <h3 class="feature-title">Viewing Guides</h3>
-                    <p class="feature-desc">Background context parents can share before or during films — historical settings, artistic techniques, cultural notes.</p>
-                </article>
-                <article class="feature" role="listitem">
-                    <h3 class="feature-title">Conversation Starters</h3>
-                    <p class="feature-desc">Thoughtful questions to explore after watching — helping families process themes together without lecturing.</p>
-                </article>
-                <article class="feature" role="listitem">
-                    <h3 class="feature-title">Age-Aware Collections</h3>
-                    <p class="feature-desc">Thematic film lists organised by age readiness and interest — from first studio ghibli to gateway world cinema.</p>
-                </article>
-            </div>
-            <p class="status" role="status">
-                <span class="status-dot" aria-hidden="true"></span>
-                <span>In development — launching 2025</span>
-            </p>
         </section>
 
         <section aria-labelledby="accessibility-heading">
@@ -333,5 +555,134 @@
         <p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
         <p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Simple data-first template: add films once, then reuse across shelves.
+        // Posters: save JPGs in /assets/posters/ and reference them like "/assets/posters/<slug>.jpg"
+        const films = {
+            "zootropolis": {
+                title: "Zootropolis",
+                year: 2016,
+                poster: "/assets/posters/zootropolis.jpg",
+                blurb: "Bright, witty buddy-cop animation. (Also known as “Zootopia” in some regions.)",
+                bbfc: "",
+                imdb: "",
+                where: []
+            },
+            "wall-e": {
+                title: "WALL·E",
+                year: 2008,
+                poster: "/assets/posters/wall-e.jpg",
+                blurb: "A gentle sci‑fi romance with a big heart — and a quietly sharp environmental warning.",
+                bbfc: "",
+                imdb: "",
+                where: []
+            },
+            "flow": {
+                title: "Flow",
+                year: "",
+                poster: "/assets/posters/flow.jpg",
+                blurb: "A quiet, visual-led story that invites empathy and discussion (update year + notes when ready).",
+                bbfc: "",
+                imdb: "",
+                where: []
+            },
+            "la-la-land": {
+                title: "La La Land",
+                year: 2016,
+                poster: "/assets/posters/la-la-land.jpg",
+                blurb: "Stylish modern musical about love, ambition, and the choices that shape a life.",
+                bbfc: "12A",
+                imdb: "8.0",
+                where: []
+            },
+            "the-wild-robot": {
+                title: "The Wild Robot",
+                year: "",
+                poster: "/assets/posters/the-wild-robot.jpg",
+                blurb: "A modern fable about care, belonging, and what it means to be ‘alive’ in a changing world.",
+                bbfc: "",
+                imdb: "",
+                where: []
+            },
+            "my-neighbor-totoro": {
+                title: "My Neighbor Totoro",
+                year: 1988,
+                poster: "/assets/posters/my-neighbor-totoro.jpg",
+                blurb: "A calm, magical classic about childhood, nature, and the comfort of the unseen.",
+                bbfc: "",
+                imdb: "",
+                where: []
+            },
+            "its-a-wonderful-life": {
+                title: "It’s a Wonderful Life",
+                year: 1946,
+                poster: "/assets/posters/its-a-wonderful-life.jpg",
+                blurb: "A classic about community, despair, and hope — best for co‑viewing with gentle context.",
+                bbfc: "",
+                imdb: "",
+                where: []
+            }
+        };
+
+        // Shelves: you can repeat films across shelves (BFI/MUBI style).
+        const shelves = {
+            "rail-new": ["zootropolis", "flow", "la-la-land"],
+            "rail-animation": ["zootropolis", "my-neighbor-totoro", "wall-e"],
+            "rail-planet": ["wall-e", "flow", "the-wild-robot"],
+            "rail-adult": ["la-la-land", "its-a-wonderful-life", "wall-e"]
+        };
+
+        function cardHTML(id) {
+            const f = films[id];
+            const href = (id.startsWith("coming-soon")) ? "#" : `/films/${id}/`;
+
+            const poster = f.poster
+                ? `<img src="${f.poster}" alt="${f.title} poster" loading="lazy" decoding="async">`
+                : ``;
+
+            const posterClass = f.poster ? "poster" : "poster poster--placeholder";
+
+            const where = (f.where || []).map(x => `<span class="badge">${x}</span>`).join("");
+            const badges = [
+                f.bbfc ? `<span class="badge">BBFC ${f.bbfc}</span>` : "",
+                f.imdb ? `<span class="badge">IMDb ${f.imdb}</span>` : "",
+                where
+            ].join("");
+
+            const yearLine = f.year ? `${f.year}` : "";
+
+            return `
+                <li class="card">
+                    <a class="card__link" href="${href}" aria-label="${f.title}${yearLine ? ` (${yearLine})` : ""}">
+                        <div class="${posterClass}">${poster}</div>
+                        <div class="meta">
+                            <div class="title">${f.title}</div>
+                            <div class="year">${yearLine}</div>
+                        </div>
+                        <div class="peek" aria-hidden="true">
+                            <div>${f.blurb}</div>
+                            <div class="badges">${badges}</div>
+                        </div>
+                    </a>
+                </li>
+            `;
+        }
+
+        for (const railId in shelves) {
+            const el = document.getElementById(railId);
+            if (!el) continue;
+            el.innerHTML = shelves[railId].map(cardHTML).join("");
+        }
+
+        // Small accessibility enhancement: press Esc to dismiss an open "peek" (blur focused card).
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape") return;
+            const active = document.activeElement;
+            if (active && active.classList && active.classList.contains("card__link")) {
+                active.blur();
+            }
+        });
+    </script>
 </body>
 </html>
