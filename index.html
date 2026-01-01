@@ -392,7 +392,7 @@
 
         .shelf__rail {
     overflow-x: auto;
-    overflow-y: hidden; /* avoid nested vertical scrollbars */
+    overflow-y: visible; /* avoid nested vertical scrollbars */
     scroll-snap-type: x mandatory;
     padding: 0.25rem 0 0.5rem;
     -webkit-overflow-scrolling: touch;
@@ -427,10 +427,10 @@
 
         .poster {
             width: 100%;
-            aspect-ratio: 2 / 3;
+            aspect-ratio: 16 / 9; /* landscape like Prime */
             border-radius: 18px;
-            border: 1px solid var(--color-border-on-dark);
-            background: #f2f2f2;
+            border: 1px solid rgba(243, 243, 243, 0.14);
+            background: rgba(255,255,255,0.04);
             overflow: hidden;
             position: relative;
         }
@@ -440,6 +440,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transform: translateZ(0);
         }
 
         .poster--placeholder::after {
@@ -464,62 +465,112 @@
 
         .year { color: var(--color-muted-on-dark); font-size: 0.95rem; }
 
+        /* Prime-like hover panel (informational only)
+           Text starts at ~2/5 height so the poster top/title stays visible. */
         .peek {
-    position: absolute;
-    left: 0.6rem;
-    right: 0.6rem;
-    bottom: 0.6rem;
-    border-radius: 14px;
-    padding: 0.75rem 0.8rem;
-    background: rgba(31, 33, 36, 0.92);
-    color: var(--color-ink-on-dark);
-    border: 1px solid rgba(243, 243, 243, 0.12);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-    opacity: 0;
-    transform: translateY(6px);
-    pointer-events: none;
-    transition: opacity 160ms ease, transform 160ms ease;
-}
-
-/* Show peek on hover/focus (desktop + keyboard) */
-@media (hover: hover) {
-    .card:hover .peek {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-}
-
-.card:focus-within .peek {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-.peek .badges { margin-top: 0.6rem; }
-.peek .badge {
-    color: rgba(243, 243, 243, 0.82);
-    border-color: rgba(243, 243, 243, 0.18);
-}
-
-/* Keep motion respectful */
-        @media (prefers-reduced-motion: reduce) {
-            .peek { transition: none; }
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 40%;
+            bottom: 0;
+            border-radius: 0 0 18px 18px;
+            padding: 0.9rem 0.95rem 0.85rem;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.00) 0%,
+                rgba(0, 0, 0, 0.12) 25%,
+                rgba(0, 0, 0, 0.38) 55%,
+                rgba(0, 0, 0, 0.58) 100%
+            );
+            color: #fff;
+            opacity: 0;
+            transform: translateY(6px);
+            pointer-events: none;
+            transition: opacity 160ms ease, transform 160ms ease;
         }
 
-        .badges {
+        /* Optional per-film light theme */
+        .card[data-theme="light"] .peek {
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.00) 0%,
+                rgba(255, 255, 255, 0.35) 25%,
+                rgba(255, 255, 255, 0.65) 55%,
+                rgba(255, 255, 255, 0.82) 100%
+            );
+            color: #101214;
+            text-shadow: none;
+        }
+
+        .peek__award {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            opacity: 0.95;
+            margin-bottom: 0.45rem;
+        }
+
+        .peek__meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.6rem;
+            gap: 0.45rem 0.55rem;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin-bottom: 0.55rem;
         }
 
-        .badge {
-            border: 1px solid var(--color-border);
+        .peek__pill {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.28);
             border-radius: 999px;
-            padding: 0.2rem 0.55rem;
-            font-size: 0.9rem;
-            color: var(--color-muted);
+            padding: 0.12rem 0.5rem;
+            font-size: 0.92rem;
+        }
+
+        .card[data-theme="light"] .peek__pill {
+            border-color: rgba(0,0,0,0.18);
+        }
+
+        .peek__where {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 0.55rem;
+        }
+
+        .peek__blurb {
+            font-size: 0.98rem;
+            line-height: 1.35;
+            opacity: 0.95;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .peek,
+        .title,
+        .year {
+            font-family: var(--font-sans);
+        }
+
+        /* Trigger states */
+        .card:hover .peek,
+        .card:focus-within .peek {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Hover expansion (Prime-ish) */
+        .card {
+            transition: transform 180ms ease;
+            transform-origin: center;
+        }
+        .card:hover,
+        .card:focus-within {
+            transform: scale(1.12) translateY(-6px);
+            z-index: 25;
         }
 
         /* Reduce peek complexity on touch devices */
@@ -625,71 +676,104 @@
     </footer>
 
     <script>
+        function escapeHtml(str){
+            return String(str)
+              .replace(/&/g,'&amp;')
+              .replace(/</g,'&lt;')
+              .replace(/>/g,'&gt;')
+              .replace(/"/g,'&quot;')
+              .replace(/'/g,'&#39;');
+        }
+
         // Simple data-first template: add films once, then reuse across shelves.
         // Posters: save JPGs in /assets/posters/ and reference them like "/assets/posters/<slug>.webp"
+        // Simple data-first template: add films once, then reuse across shelves.
+        // Posters: save images in /assets/posters/ and reference them like "/assets/posters/<slug>.webp"
+        // Tip: for Prime-like hover cards, landscape posters (16:9) look best.
         const films = {
             "zootropolis": {
                 title: "Zootropolis",
                 year: 2016,
                 poster: "/assets/posters/zootropolis.webp",
-                blurb: "Bright, witty buddy-cop animation. (Also known as “Zootopia” in some regions.)",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "Bright, witty buddy‑cop animation. (Also known as “Zootopia” in some regions.)",
+                theme: "dark"
             },
             "wall-e": {
                 title: "WALL·E",
                 year: 2008,
                 poster: "/assets/posters/wall-e.webp",
-                blurb: "A gentle sci‑fi romance with a big heart — and a quietly sharp environmental warning.",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "A gentle sci‑fi romance with a big heart — and a quietly sharp environmental warning.",
+                theme: "dark"
             },
             "flow": {
                 title: "Flow",
                 year: "",
                 poster: "/assets/posters/flow.webp",
-                blurb: "A quiet, visual-led story that invites empathy and discussion (update year + notes when ready).",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "A quiet, visual‑led story that invites empathy and discussion (update year + notes).",
+                theme: "dark"
             },
             "la-la-land": {
                 title: "La La Land",
                 year: 2016,
                 poster: "/assets/posters/la-la-land.webp",
-                blurb: "Stylish modern musical about love, ambition, and the choices that shape a life.",
-                bbfc: "12A",
+                awardLine: "",
                 imdb: "8.0",
-                where: []
+                runtime: "",
+                bbfc: "12A",
+                whereLine: "",
+                blurb: "Stylish modern musical about love, ambition, and the choices that shape a life.",
+                theme: "dark"
             },
             "the-wild-robot": {
                 title: "The Wild Robot",
                 year: "",
                 poster: "/assets/posters/the-wild-robot.webp",
-                blurb: "A modern fable about care, belonging, and what it means to be ‘alive’ in a changing world.",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "A modern fable about care, belonging, and what it means to be ‘alive’ in a changing world.",
+                theme: "dark"
             },
             "my-neighbor-totoro": {
                 title: "My Neighbor Totoro",
                 year: 1988,
                 poster: "/assets/posters/my-neighbor-totoro.webp",
-                blurb: "A calm, magical classic about childhood, nature, and the comfort of the unseen.",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "A calm, magical classic about childhood, nature, and the comfort of the unseen.",
+                theme: "dark"
             },
             "its-a-wonderful-life": {
                 title: "It’s a Wonderful Life",
                 year: 1946,
                 poster: "/assets/posters/its-a-wonderful-life.webp",
-                blurb: "A classic about community, despair, and hope — best for co‑viewing with gentle context.",
-                bbfc: "",
+                awardLine: "",
                 imdb: "",
-                where: []
+                runtime: "",
+                bbfc: "",
+                whereLine: "",
+                blurb: "A classic about community, despair, and hope — best for co‑viewing with gentle context.",
+                theme: "dark"
             }
         };
 
@@ -703,42 +787,47 @@
 
         function cardHTML(id) {
             const f = films[id];
-            const href = (id.startsWith("coming-soon")) ? "#" : `/films/${id}/`;
 
-            const poster = f.poster
-                ? `<img src="${f.poster}" alt="${f.title} poster" loading="lazy" decoding="async">`
-                : ``;
+            const awardLine = f.awardLine ? `<div class="peek__award">${escapeHtml(f.awardLine)}</div>` : "";
+            const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
+            const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
+            const runtime = f.runtime ? `<span class="peek__pill">${escapeHtml(f.runtime)}</span>` : "";
+            const bbfc = f.bbfc ? `<span class="peek__pill">BBFC ${escapeHtml(f.bbfc)}</span>` : "";
+            const where = f.whereLine ? `<div class="peek__where">${escapeHtml(f.whereLine)}</div>` : "";
+            const blurb = f.blurb ? `<div class="peek__blurb">${escapeHtml(f.blurb)}</div>` : "";
 
-            const posterClass = f.poster ? "poster" : "poster poster--placeholder";
+            const metaRow = (imdb || year || runtime || bbfc)
+                ? `<div class="peek__meta">${imdb}${year}${runtime}${bbfc}</div>`
+                : "";
 
-            const where = (f.where || []).map(x => `<span class="badge">${x}</span>`).join("");
-            const badges = [
-                f.bbfc ? `<span class="badge">BBFC ${f.bbfc}</span>` : "",
-                f.imdb ? `<span class="badge">IMDb ${f.imdb}</span>` : "",
-                where
-            ].join("");
+            const posterImg = f.poster
+                ? `<img src="${f.poster}" alt="${escapeHtml(f.title)} poster" loading="lazy" decoding="async">`
+                : "";
 
-            const yearLine = f.year ? `${f.year}` : "";
+            const themeAttr = f.theme ? ` data-theme="${escapeHtml(f.theme)}"` : "";
 
             return `
-                <li class="card">
-                    <a class="card__link" href="${href}" aria-label="${f.title}${yearLine ? ` (${yearLine})` : ""}">
-                        <div class="${posterClass}">${poster}
-                            <div class="peek" aria-hidden="true">
-                                <div>${f.blurb}</div>
-                                <div class="badges">${badges}</div>
-                            </div>
-                        </div>
-                        <div class="meta">
-                            <div class="title">${f.title}</div>
-                            <div class="year">${yearLine}</div>
-                        </div>
-                    </a>
-                </li>
+              <li class="card"${themeAttr}>
+                <a class="card__link" href="/films/${id}/" aria-label="${escapeHtml(f.title)} (${escapeHtml(String(f.year || ""))})">
+                  <div class="poster">
+                    ${posterImg}
+                    <div class="peek" role="note" aria-hidden="true">
+                      ${awardLine}
+                      ${metaRow}
+                      ${where}
+                      ${blurb}
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <div class="title">${escapeHtml(f.title)}</div>
+                    ${f.year ? `<div class="year">${escapeHtml(String(f.year))}</div>` : ``}
+                  </div>
+                </a>
+              </li>
             `;
         }
 
-        for (const railId in shelves) {
+        for (const railId in shelves) { {
             const el = document.getElementById(railId);
             if (!el) continue;
             el.innerHTML = shelves[railId].map(cardHTML).join("");
@@ -752,6 +841,15 @@
                 active.blur();
             }
         });
-    </script>
+    
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const active = document.activeElement;
+                if (active && active.closest && active.closest('.card__link')) {
+                    active.blur();
+                }
+            }
+        });
+</script>
 </body>
 </html>
