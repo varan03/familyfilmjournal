@@ -25,6 +25,7 @@
 
             /* Accents / borders */
             --color-accent: #8b4513;
+            --color-accent-light: rgba(139, 69, 19, 0.18);
             --color-border: rgba(26, 26, 26, 0.12);
             --color-border-on-dark: rgba(243, 243, 243, 0.16);
 
@@ -551,7 +552,7 @@
         .peek,
         .title,
         .year {
-            font-family: var(--font-sans);
+            font-family: var(--font-body);
         }
 
         /* Trigger states */
@@ -685,8 +686,6 @@
               .replace(/'/g,'&#39;');
         }
 
-        // Simple data-first template: add films once, then reuse across shelves.
-        // Posters: save JPGs in /assets/posters/ and reference them like "/assets/posters/<slug>.webp"
         // Simple data-first template: add films once, then reuse across shelves.
         // Posters: save images in /assets/posters/ and reference them like "/assets/posters/<slug>.webp"
         // Tip: for Prime-like hover cards, landscape posters (16:9) look best.
@@ -827,7 +826,7 @@
             `;
         }
 
-        for (const railId in shelves) { {
+        for (const railId in shelves) {
             const el = document.getElementById(railId);
             if (!el) continue;
             el.innerHTML = shelves[railId].map(cardHTML).join("");
@@ -839,15 +838,6 @@
             const active = document.activeElement;
             if (active && active.classList && active.classList.contains("card__link")) {
                 active.blur();
-            }
-        });
-    
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const active = document.activeElement;
-                if (active && active.closest && active.closest('.card__link')) {
-                    active.blur();
-                }
             }
         });
 </script>
