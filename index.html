@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Family Film Journal - Curated film recommendations and viewing guides for parents of 6-12 year olds. Cinema that sparks family conversations.">
+    <meta name="description" content="Family Film Journal - Curated film recommendations and viewing guides for parents of children aged 6–12. Cinema that sparks family conversations.">
     <title>Family Film Journal | Cinema that sparks family conversations</title>
     
     <!-- Preconnect for fonts -->
@@ -68,7 +68,7 @@
             left: 50%;
             transform: translateX(-50%);
             background: var(--color-ink);
-            color: var(--color-paper);
+            color: var(--color-card);
             padding: 0.75rem 1.5rem;
             text-decoration: none;
             border-radius: 0 0 4px 4px;
@@ -381,7 +381,7 @@
         }
 
         .shelf__link:hover {
-            color: var(--color-ink);
+            opacity: 1;
         }
 
         .shelf__link:focus-visible {
@@ -391,22 +391,22 @@
         }
 
         .shelf__rail {
-            overflow-x: auto;
-            overflow-y: visible;
-            scroll-snap-type: x mandatory;
-            padding: 0.25rem 0 2.75rem; /* room for peek panel */
-            -webkit-overflow-scrolling: touch;
-        }
+    overflow-x: auto;
+    overflow-y: hidden; /* avoid nested vertical scrollbars */
+    scroll-snap-type: x mandatory;
+    padding: 0.25rem 0 0.5rem;
+    -webkit-overflow-scrolling: touch;
+}
 
         .shelf__list {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: minmax(180px, 220px);
-            gap: 1rem;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(170px, 210px);
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
         .card {
             position: relative;
@@ -465,38 +465,44 @@
         .year { color: var(--color-muted-on-dark); font-size: 0.95rem; }
 
         .peek {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: calc(100% + 0.5rem);
-            border: 1px solid var(--color-border);
-            border-radius: 18px;
-            background: var(--color-card);
-            padding: 0.9rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            opacity: 0;
-            transform: translateY(-6px);
-            pointer-events: none;
-            transition: opacity 160ms ease, transform 160ms ease;
-        
-            color: var(--color-ink);
-        }
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    border-radius: 14px;
+    padding: 0.75rem 0.8rem;
+    background: rgba(31, 33, 36, 0.92);
+    color: var(--color-ink-on-dark);
+    border: 1px solid rgba(243, 243, 243, 0.12);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms ease;
+}
 
-        /* Show peek on hover/focus (desktop + keyboard) */
-        @media (hover: hover) {
-            .card:hover .peek {
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: auto;
-            }
-        }
+/* Show peek on hover/focus (desktop + keyboard) */
+@media (hover: hover) {
+    .card:hover .peek {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
 
-        .card:focus-within .peek {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
+.card:focus-within .peek {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
 
+.peek .badges { margin-top: 0.6rem; }
+.peek .badge {
+    color: rgba(243, 243, 243, 0.82);
+    border-color: rgba(243, 243, 243, 0.18);
+}
+
+/* Keep motion respectful */
         @media (prefers-reduced-motion: reduce) {
             .peek { transition: none; }
         }
@@ -519,7 +525,6 @@
         /* Reduce peek complexity on touch devices */
         @media (hover: none) {
             .peek { display: none; }
-            .shelf__rail { padding-bottom: 0.5rem; }
         }
     
         /* About panel inside dark main */
@@ -543,7 +548,7 @@
         <div class="wrap wrap--narrow">
         <h1 class="site-title">Family Film Journal</h1>
         <p class="tagline">Cinema that sparks family conversations</p>
-        <p class="subtitle">Curated film recommendations and viewing guides for parents of 6–12 year olds — helping you share great cinema with context, not caution.</p>
+        <p class="subtitle">Curated film recommendations and viewing guides for parents of children aged 6–12 — helping you share great cinema with context, not caution.</p>
 
         <nav class="site-nav" aria-label="Primary">
             <a href="/films/">Films</a>
@@ -718,14 +723,15 @@
             return `
                 <li class="card">
                     <a class="card__link" href="${href}" aria-label="${f.title}${yearLine ? ` (${yearLine})` : ""}">
-                        <div class="${posterClass}">${poster}</div>
+                        <div class="${posterClass}">${poster}
+                            <div class="peek" aria-hidden="true">
+                                <div>${f.blurb}</div>
+                                <div class="badges">${badges}</div>
+                            </div>
+                        </div>
                         <div class="meta">
                             <div class="title">${f.title}</div>
                             <div class="year">${yearLine}</div>
-                        </div>
-                        <div class="peek" aria-hidden="true">
-                            <div>${f.blurb}</div>
-                            <div class="badges">${badges}</div>
                         </div>
                     </a>
                 </li>
