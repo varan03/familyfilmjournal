@@ -397,7 +397,15 @@
     scroll-snap-type: x mandatory;
     padding: 0.5rem 0 9rem;
     -webkit-overflow-scrolling: touch;
-}
+
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge legacy */
+            scroll-snap-type: x mandatory;
+        
+            position: relative;
+        }
+
+        .shelf__rail::-webkit-scrollbar { display: none; }
 
         .shelf__list {
     display: grid;
@@ -626,7 +634,78 @@
         }
         .card[data-theme="light"] .bbfc-badge{
             border-color: rgba(0,0,0,0.65);
-        }</style>
+        }
+
+        /* Shelf arrows (shown only when needed) */
+        .shelf { position: relative; }
+
+        .shelf__arrow {
+            position: absolute;
+            top: 118px;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(15, 17, 19, 0.55);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 160ms ease, transform 160ms ease, background 160ms ease;
+            z-index: 60;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            user-select: none;
+        }
+
+        .shelf__arrow:hover {
+            background: rgba(15, 17, 19, 0.72);
+            transform: scale(1.03);
+        }
+
+        .shelf__arrow:disabled { opacity: 0.2; cursor: default; }
+
+        .shelf__arrow--left { left: 6px; }
+        .shelf__arrow--right { right: 6px; }
+
+        .shelf.show-arrows:hover .shelf__arrow,
+        .shelf.show-arrows:focus-within .shelf__arrow {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card:hover, .card:focus-within { z-index: 80; }
+
+        /* Subtle edge “peek” fades (shown only when overflow exists) */
+        .shelf__rail::before,
+        .shelf__rail::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 56px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 160ms ease;
+            z-index: 55; /* below arrows (60), above posters */
+        }
+
+        .shelf.has-overflow .shelf__rail::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(30, 34, 37, 0.95), rgba(30, 34, 37, 0));
+        }
+
+        .shelf.has-overflow .shelf__rail::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(30, 34, 37, 0.95), rgba(30, 34, 37, 0));
+        }
+
+        /* Show/hide per edge based on scroll position */
+        .shelf.has-overflow:not(.at-start) .shelf__rail::before { opacity: 1; }
+        .shelf.has-overflow:not(.at-end) .shelf__rail::after { opacity: 1; }</style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -875,6 +954,71 @@
                 active.blur();
             }
         });
+// Shelf navigation: show arrows only when a shelf has more than 4 films AND actually overflows
+        // Also allow mouse wheel to scroll the shelf horizontally (without trapping page scroll when not moving).
+        function canScroll(rail) {
+            return (rail.scrollWidth - rail.clientWidth) > 1;
+        }
+
+        function updateArrowState(shelf, rail) {
+            const leftBtn = shelf.querySelector('.shelf__arrow--left');
+            const rightBtn = shelf.querySelector('.shelf__arrow--right');
+
+            const maxScroll = rail.scrollWidth - rail.clientWidth;
+            const atStart = rail.scrollLeft <= 2;
+            const atEnd = rail.scrollLeft >= maxScroll - 2;
+
+            // Edge peek fades
+            shelf.classList.toggle('has-overflow', maxScroll > 1);
+            shelf.classList.toggle('at-start', atStart);
+            shelf.classList.toggle('at-end', atEnd);
+
+            if (!leftBtn || !rightBtn) return;
+            leftBtn.disabled = atStart;
+            rightBtn.disabled = atEnd;
+        }
+
+        function setupShelfNav(shelf) {
+            const rail = shelf.querySelector('.shelf__rail');
+            const list = shelf.querySelector('.shelf__list');
+            const leftBtn = shelf.querySelector('.shelf__arrow--left');
+            const rightBtn = shelf.querySelector('.shelf__arrow--right');
+            if (!rail || !list || !leftBtn || !rightBtn) return;
+
+            function refresh() {
+                const count = list.children.length;
+                const show = count > 4 && canScroll(rail);
+                shelf.classList.toggle('show-arrows', show);
+                updateArrowState(shelf, rail);
+            }
+
+            const step = () => Math.round(rail.clientWidth * 0.85);
+
+            leftBtn.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+            rightBtn.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+
+            rail.addEventListener('scroll', () => updateArrowState(shelf, rail), { passive: true });
+
+            rail.addEventListener('wheel', (e) => {
+                const count = list.children.length;
+                if (count <= 4) return;
+
+                const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+                if (!delta) return;
+
+                const before = rail.scrollLeft;
+                rail.scrollLeft += delta;
+
+                const moved = Math.abs(rail.scrollLeft - before) > 0;
+                if (moved) e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('resize', refresh, { passive: true });
+            requestAnimationFrame(refresh);
+        }
+
+        document.querySelectorAll('.shelf').forEach(setupShelfNav);
+
 </script>
 </body>
 </html>
