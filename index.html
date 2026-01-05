@@ -13,6 +13,7 @@
     <style>
         :root {
             /* Surfaces */
+            --shelf-bg: #1e2225;
             --color-top: #f6f1fa;          /* light lilac */
             --color-bottom: #1f2124;       /* dark grey */
             --color-card: #faf8f5;         /* warm off-white for cards/panels */
@@ -35,7 +36,7 @@
 
             /* Layout */
             --wrap-narrow: 760px;
-            --wrap-wide: 1120px;
+            --wrap-wide: 1360px;
             --spacing-unit: 1.5rem;
         }
 
@@ -96,7 +97,7 @@
             margin: 0 auto;
         }
         .wrap--narrow { max-width: var(--wrap-narrow); }
-        .wrap--wide { max-width: var(--wrap-wide); }
+        .wrap--wide { max-width: min(96vw, var(--wrap-wide)); }
 /* Header */
         .site-header {
             background: var(--color-top);
@@ -292,6 +293,7 @@
         @media (prefers-contrast: high) {
             :root {
             /* Surfaces */
+            --shelf-bg: #1e2225;
             --color-top: #f6f1fa;          /* light lilac */
             --color-bottom: #1f2124;       /* dark grey */
             --color-card: #faf8f5;         /* warm off-white for cards/panels */
@@ -313,7 +315,7 @@
 
             /* Layout */
             --wrap-narrow: 760px;
-            --wrap-wide: 1120px;
+            --wrap-wide: 1360px;
             --spacing-unit: 1.5rem;
         }
             
@@ -403,6 +405,10 @@
             scroll-snap-type: x mandatory;
         
             position: relative;
+        
+            padding-inline: 24px;
+            scroll-padding-left: 24px;
+            scroll-padding-right: 24px;
         }
 
         .shelf__rail::-webkit-scrollbar { display: none; }
@@ -422,6 +428,12 @@
         .card {
             position: relative;
             scroll-snap-align: start;
+        
+            transition: transform 180ms ease;
+            --hover-scale: 1;
+            --hover-shift-x: 0px;
+            --hover-shift-y: 0px;
+            transform: translate(var(--hover-shift-x), var(--hover-shift-y)) scale(var(--hover-scale));
         }
 
         .card a.card__link {
@@ -578,19 +590,19 @@
         .card:focus-within .peek {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto; /* hoverable content for SC 1.4.13 */
+            pointer-events: auto; /* hover.card:hover,
+        .card:focus-within {
+            --hover-scale: 1.16;
+            --hover-shift-y: -10px;
+            z-index: 50;
         }
-
-        /* Hover expansion (Prime-ish) */
-        .card {
-            position: relative;
             transition: transform 180ms ease;
             transform-origin: center;
             z-index: 1;
         }
         .card:hover,
         .card:focus-within {
-            transform: scale(1.22) translateY(-10px);
+            transform: scale(1.16) translateY(-10px);
             z-index: 50;
         }
 
@@ -695,12 +707,12 @@
 
         .shelf.has-overflow .shelf__rail::before {
             left: 0;
-            background: linear-gradient(to right, rgba(30, 34, 37, 0.95), rgba(30, 34, 37, 0));
+            background: linear-gradient(to right, rgba(30, 34, 37, 0.92), rgba(30, 34, 37, 0));
         }
 
         .shelf.has-overflow .shelf__rail::after {
             right: 0;
-            background: linear-gradient(to left, rgba(30, 34, 37, 0.95), rgba(30, 34, 37, 0));
+            background: linear-gradient(to left, rgba(30, 34, 37, 0.92), rgba(30, 34, 37, 0));
         }
 
         /* Show/hide per edge based on scroll position */
@@ -963,13 +975,16 @@
         function updateArrowState(shelf, rail) {
             const leftBtn = shelf.querySelector('.shelf__arrow--left');
             const rightBtn = shelf.querySelector('.shelf__arrow--right');
+            const list = shelf.querySelector('.shelf__list');
+            const count = list ? list.children.length : 0;
 
             const maxScroll = rail.scrollWidth - rail.clientWidth;
             const atStart = rail.scrollLeft <= 2;
             const atEnd = rail.scrollLeft >= maxScroll - 2;
 
-            // Edge peek fades
-            shelf.classList.toggle('has-overflow', maxScroll > 1);
+            // Edge peek fades: only if shelf is meant to scroll (more than 4 items) and actually overflows
+            const shouldShowOverflowHints = (count > 4) && (maxScroll > 1);
+            shelf.classList.toggle('has-overflow', shouldShowOverflowHints);
             shelf.classList.toggle('at-start', atStart);
             shelf.classList.toggle('at-end', atEnd);
 
@@ -1018,6 +1033,44 @@
         }
 
         document.querySelectorAll('.shelf').forEach(setupShelfNav);
+
+// Keep hover-expanded cards fully within the viewport (prevents left/right clipping)
+        function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+        function applyHoverShift(card, scale) {
+            const margin = 16; // px from viewport edge
+            const rect = card.getBoundingClientRect();
+            const expandedW = rect.width * scale;
+            const expandedH = rect.height * scale;
+
+            // Compute where the expanded card would sit if centered on its current position
+            const centerX = rect.left + rect.width / 2;
+            const expandedLeft = centerX - expandedW / 2;
+            const expandedRight = centerX + expandedW / 2;
+
+            let shiftX = 0;
+            if (expandedLeft < margin) shiftX = margin - expandedLeft;
+            if (expandedRight > (window.innerWidth - margin)) shiftX = (window.innerWidth - margin) - expandedRight;
+
+            // Set CSS variable (used by transform)
+            card.style.setProperty('--hover-shift-x', `${shiftX}px`);
+        }
+
+        function clearHoverShift(card) {
+            card.style.setProperty('--hover-shift-x', '0px');
+        }
+
+        function setupHoverClamping() {
+            const scale = 1.16; // must match CSS hover scale
+            document.querySelectorAll('.card').forEach((card) => {
+                card.addEventListener('mouseenter', () => applyHoverShift(card, scale));
+                card.addEventListener('mouseleave', () => clearHoverShift(card));
+                card.addEventListener('focusin', () => applyHoverShift(card, scale));
+                card.addEventListener('focusout', () => clearHoverShift(card));
+            });
+        }
+
+        setupHoverClamping();
 
 </script>
 </body>
