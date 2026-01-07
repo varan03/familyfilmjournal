@@ -1,16 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Family Film Journal - Curated film recommendations and viewing guides for parents of children aged 6–12. Cinema that sparks family conversations.">
-    <title>Family Film Journal | Cinema that sparks family conversations</title>
-    
-    <!-- Preconnect for fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Family Film Journal - Curated film recommendations and viewing guides for parents of children aged 6–12. Cinema that sparks family conversations." name="description"/>
+<title>Family Film Journal | Cinema that sparks family conversations</title>
+<!-- Preconnect for fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
         :root {
             /* Surfaces */
             --shelf-bg: #1e2225;
@@ -356,7 +356,7 @@
         }
 
         /* Shelves (BFI/MUBI-style rows) */
-        .shelf { margin: 0 0 calc(var(--spacing-unit) * 3); }
+        .shelf { margin: 0 0 calc(var(--spacing-unit) * 2); }
 
         .shelf__head {
             display: flex;
@@ -397,7 +397,7 @@
     overflow-x: auto;
     overflow-y: visible; /* avoid nested vertical scrollbars */
     scroll-snap-type: x mandatory;
-    padding: 0.5rem 0 9rem;
+    padding: 0.5rem 0 6.5rem;
     -webkit-overflow-scrolling: touch;
 
             scrollbar-width: none; /* Firefox */
@@ -590,7 +590,7 @@
         .card:focus-within .peek {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto; /* hover.card:hover,
+            pointer-events: auto;
         .card:focus-within {
             --hover-scale: 1.16;
             --hover-shift-y: -10px;
@@ -717,92 +717,185 @@
 
         /* Show/hide per edge based on scroll position */
         .shelf.has-overflow:not(.at-start) .shelf__rail::before { opacity: 1; }
-        .shelf.has-overflow:not(.at-end) .shelf__rail::after { opacity: 1; }</style>
+        .shelf.has-overflow:not(.at-end) .shelf__rail::after { opacity: 1; }
+/* Peek content layout */
+.peek { 
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+.peek__title{
+    font-weight: 900;
+    font-size: 1.18rem;
+    line-height: 1.15;
+    letter-spacing: 0.2px;
+    margin-bottom: 0.05rem;
+}
+.peek__synopsis{
+    font-size: 1.02rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.peek__themes,
+.peek__take{
+    font-size: 0.98rem;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.92);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.peek__label{
+    font-weight: 800;
+    color: rgba(255,255,255,0.98);
+}
+/* Push meta + where to the bottom of the expanded peek */
+.peek__meta{ margin-top: auto; }
+
+/* BBFC tooltip (shows details only on hover/focus) */
+.bbfc-badge[data-tooltip]{
+    position: relative;
+    outline: none;
+}
+.bbfc-badge[data-tooltip]::after,
+.bbfc-badge[data-tooltip]::before{
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease;
+    z-index: 200;
+}
+.bbfc-badge[data-tooltip]::after{
+    content: attr(data-tooltip);
+    bottom: calc(100% + 10px);
+    background: rgba(0,0,0,0.88);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 0.6rem 0.75rem;
+    width: max-content;
+    max-width: 320px;
+    white-space: normal;
+    font-size: 0.92rem;
+    line-height: 1.25;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.55);
+}
+.bbfc-badge[data-tooltip]::before{
+    bottom: calc(100% + 4px);
+    width: 10px;
+    height: 10px;
+    background: rgba(0,0,0,0.88);
+    border-left: 1px solid rgba(255,255,255,0.25);
+    border-top: 1px solid rgba(255,255,255,0.25);
+    transform: translateX(-50%) rotate(45deg);
+}
+.bbfc-badge[data-tooltip]:hover::after,
+.bbfc-badge[data-tooltip]:hover::before,
+.bbfc-badge[data-tooltip]:focus-visible::after,
+.bbfc-badge[data-tooltip]:focus-visible::before{
+    opacity: 1;
+}
+/* Prevent tooltip from going off-screen in very narrow viewports */
+@media (max-width: 420px){
+    .bbfc-badge[data-tooltip]::after{
+        left: 0;
+        transform: none;
+        max-width: 260px;
+    }
+    .bbfc-badge[data-tooltip]::before{
+        left: 1.2rem;
+        transform: rotate(45deg);
+    }
+}
+</style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <header role="banner" class="site-header">
-        <div class="wrap wrap--narrow">
-        <h1 class="site-title">Family Film Journal</h1>
-        <p class="tagline">Cinema that sparks family conversations</p>
-        <p class="subtitle">Curated film recommendations and viewing guides for parents of children aged 6–12 — helping you share great cinema with context, not caution.</p>
-
-        <nav class="site-nav" aria-label="Primary">
-            <a href="/films/">Films</a>
-            <a href="/collections/">Collections</a>
-            <a href="/about/">About</a>
-            <a href="#search" class="nav-muted" title="Search coming soon" aria-label="Search (coming soon)">Search</a>
-        </nav>
-        </div>
-    </header>
-
-        
-        <main id="main-content" role="main" class="site-main">
-        <div class="wrap wrap--wide">
-        <section class="shelf" aria-labelledby="shelf-new">
-            <div class="shelf__head">
-                <h2 id="shelf-new">New on the Journal</h2>
-                <a class="shelf__link" href="/films/">See all</a>
-            </div>
-            <div class="shelf__rail" data-rail>
-                <ul class="shelf__list" role="list" id="rail-new"></ul>
-            </div>
-        </section>
-
-        <section class="shelf" aria-labelledby="shelf-animation">
-            <div class="shelf__head">
-                <h2 id="shelf-animation">Animation classics</h2>
-                <a class="shelf__link" href="/collections/animation-classics/">See all</a>
-            </div>
-            <div class="shelf__rail" data-rail>
-                <ul class="shelf__list" role="list" id="rail-animation"></ul>
-            </div>
-        </section>
-
-        <section class="shelf" aria-labelledby="shelf-planet">
-            <div class="shelf__head">
-                <h2 id="shelf-planet">Nature, environment &amp; the future of our planet</h2>
-                <a class="shelf__link" href="/collections/planet-and-tomorrow/">See all</a>
-            </div>
-            <div class="shelf__rail" data-rail>
-                <ul class="shelf__list" role="list" id="rail-planet"></ul>
-            </div>
-        </section>
-
-        <section class="shelf" aria-labelledby="shelf-adult">
-            <div class="shelf__head">
-                <h2 id="shelf-adult">Adult classics kids can join</h2>
-                <a class="shelf__link" href="/collections/adult-classics-with-kids/">See all</a>
-            </div>
-            <div class="shelf__rail" data-rail>
-                <ul class="shelf__list" role="list" id="rail-adult"></ul>
-            </div>
-        </section>
-
-
-        <section aria-labelledby="about-heading" class="about">
-            <h2 id="about-heading">About This Project</h2>
-            <p>Family Film Journal is an editorial platform dedicated to helping parents discover films worth sharing with their children. We believe that great cinema — films crafted with care in their visuals, sound, rhythm, and storytelling — can be a powerful catalyst for family connection and young minds.</p>
-            <p>Rather than simply flagging content warnings, we provide thoughtful context: the background, themes, and conversation starters that transform passive viewing into engaged discovery. Our recommendations span animation, world cinema, classics, and contemporary films — chosen for their artistic merit and potential to spark meaningful dialogue.</p>
-        </section>
-
-        <section aria-labelledby="accessibility-heading">
-            <h2 id="accessibility-heading">Accessibility</h2>
-            <div class="accessibility-commitment">
-                <p>Family Film Journal is committed to digital accessibility. This site is designed to meet WCAG 2.1 AA standards, with semantic HTML, keyboard navigation, screen reader support, and respect for user preferences including reduced motion and high contrast modes.</p>
-                <p>If you encounter any accessibility barriers, please contact us so we can improve.</p>
-            </div>
-        </section>
-            </div>
-    </main>
-
-    <footer role="contentinfo">
-        <p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
-        <p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
-    </footer>
-
-    <script>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-header" role="banner">
+<div class="wrap wrap--narrow">
+<h1 class="site-title">Family Film Journal</h1>
+<p class="tagline">Cinema that sparks family conversations</p>
+<p class="subtitle">Curated film recommendations and viewing guides for parents of children aged 6–12 — helping you share great cinema with context, not caution.</p>
+<nav aria-label="Primary" class="site-nav">
+<a href="/films/">Films</a>
+<a href="/collections/">Collections</a>
+<a href="/about/">About</a>
+<a aria-label="Search (coming soon)" class="nav-muted" href="#search" title="Search coming soon">Search</a>
+</nav>
+</div>
+</header>
+<main class="site-main" id="main-content" role="main">
+<div class="wrap wrap--wide">
+<section aria-labelledby="shelf-new" class="shelf">
+<div class="shelf__head">
+<h2 id="shelf-new">New on the Journal</h2>
+<a class="shelf__link" href="/films/">See all</a>
+</div>
+<div class="shelf__rail" data-rail="">
+<ul class="shelf__list" id="rail-new" role="list"></ul>
+</div>
+</section>
+<section aria-labelledby="shelf-animation" class="shelf">
+<div class="shelf__head">
+<h2 id="shelf-animation">Animation Classics</h2>
+<a class="shelf__link" href="/films/">See all</a>
+</div>
+<div class="shelf__rail" data-rail="">
+<ul class="shelf__list" id="rail-animation" role="list"></ul>
+</div>
+</section>
+<section aria-labelledby="shelf-animals" class="shelf">
+<div class="shelf__head">
+<h2 id="shelf-animals">Animals as Animals</h2>
+<a class="shelf__link" href="/films/">See all</a>
+</div>
+<div class="shelf__rail" data-rail="">
+<ul class="shelf__list" id="rail-animals" role="list"></ul>
+</div>
+</section><section aria-labelledby="shelf-robots" class="shelf">
+<div class="shelf__head">
+<h2 id="shelf-robots">Robots with Heart</h2>
+<a class="shelf__link" href="/films/">See all</a>
+</div>
+<div class="shelf__rail" data-rail="">
+<ul class="shelf__list" id="rail-robots" role="list"></ul>
+</div>
+</section>
+<section aria-labelledby="shelf-adult" class="shelf">
+<div class="shelf__head">
+<h2 id="shelf-adult">Grown-up classics kids can join</h2>
+<a class="shelf__link" href="/films/">See all</a>
+</div>
+<div class="shelf__rail" data-rail="">
+<ul class="shelf__list" id="rail-adult" role="list"></ul>
+</div>
+</section>
+<section aria-labelledby="about-heading" class="about">
+<h2 id="about-heading">About This Project</h2>
+<p>Family Film Journal is an editorial platform dedicated to helping parents discover films worth sharing with their children. We believe that great cinema — films crafted with care in their visuals, sound, rhythm, and storytelling — can be a powerful catalyst for family connection and young minds.</p>
+<p>Rather than simply flagging content warnings, we provide thoughtful context: the background, themes, and conversation starters that transform passive viewing into engaged discovery. Our recommendations span animation, world cinema, classics, and contemporary films — chosen for their artistic merit and potential to spark meaningful dialogue.</p>
+</section>
+<section aria-labelledby="accessibility-heading">
+<h2 id="accessibility-heading">Accessibility</h2>
+<div class="accessibility-commitment">
+<p>Family Film Journal is committed to digital accessibility. This site is designed to meet WCAG 2.1 AA standards, with semantic HTML, keyboard navigation, screen reader support, and respect for user preferences including reduced motion and high contrast modes.</p>
+<p>If you encounter any accessibility barriers, please contact us so we can improve.</p>
+</div>
+</section>
+</div>
+</main>
+<footer role="contentinfo">
+<p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
+<p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
+</footer>
+<script>
         function escapeHtml(str){
             return String(str)
               .replace(/&/g,'&amp;')
@@ -817,116 +910,171 @@
         // Tip: for Prime-like hover cards, landscape posters (16:9) look best.
         const films = {
             "zootropolis": {
-                title: "Zootropolis",
-                year: 2016,
-                poster: "/assets/posters/zootropolis.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "Bright, witty buddy‑cop animation. (Also known as “Zootopia” in some regions.)",
-                theme: "dark"
-            },
-            "wall-e": {
-                title: "WALL·E",
-                year: 2008,
-                poster: "/assets/posters/wall-e.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "A gentle sci‑fi romance with a big heart — and a quietly sharp environmental warning.",
-                theme: "dark"
+                        "title": "Zootropolis",
+                        "year": 2016,
+                        "runtime": "1h 48m",
+                        "bbfc": "PG",
+                        "bbfcReason": "mild threat",
+                        "imdb": "8.0/10",
+                        "award": "Oscar® winner — Best Animated Feature",
+                        "synopsis": "In a world of anthropomorphic animals, Judy the rabbit becomes the first rabbit police officer in the city of Zootropolis, where prejudices against 'predator' animals are in danger of resurfacing.",
+                        "themes": "Big dreams & perseverance • doing the right thing (public service) • learning from mistakes • stereotypes & prejudice • fear-mongering & misinformation",
+                        "ourTake": "Funny and sharp; great for most 6+ with a parent",
+                        "poster": "/assets/posters/zootropolis.webp",
+                        "whereLine": ""
             },
             "flow": {
-                title: "Flow",
-                year: "",
-                poster: "/assets/posters/flow.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "A quiet, visual‑led story that invites empathy and discussion (update year + notes).",
-                theme: "dark"
+                        "title": "Flow",
+                        "year": 2024,
+                        "runtime": "1h 25m",
+                        "bbfc": "U",
+                        "bbfcReason": "",
+                        "imdb": "8.4/10",
+                        "award": "Oscar® winner — Best Animated Feature",
+                        "synopsis": "Flow tells the story of a lone cat who must learn to collaborate with a mismatched group of other species to survive a catastrophic flood.",
+                        "themes": "Cooperation • impermanence & connection • future of the planet",
+                        "ourTake": "A dialogue-free animal odyssey that turns panic into cooperation—quietly devastating",
+                        "poster": "/assets/posters/flow.webp",
+                        "whereLine": ""
             },
-            "la-la-land": {
-                title: "La La Land",
-                year: 2016,
-                poster: "/assets/posters/la-la-land.webp",
-                awardLine: "BAFTA Film Awards® — 5× winner",
-                imdb: "8.0/10",
-                runtime: "2h 8m",
-                bbfc: "12A",
-                whereLine: "Prime Video · Rent/Buy · STUDIOCANAL PRESENTS (Prime Video Channel — free trial)",
-                blurb: "A pianist and an actress fall in love in Los Angeles in this musical romance.",
-                theme: "dark"
+            "the-iron-giant": {
+                        "title": "The Iron Giant",
+                        "year": 1999,
+                        "runtime": "1h 26m",
+                        "bbfc": "U",
+                        "bbfcReason": "",
+                        "imdb": "8.1/10",
+                        "award": "BAFTA — Children’s",
+                        "synopsis": "A young boy finds a huge metal robot in the woods near his home and rescues the creature from electrocution. The pair form an unlikely friendship, which is put to the test when a suspicious FBI agent learns of the giant's existence.",
+                        "themes": "Friendship & trust • choosing who you become • Cold War fear of the “other” • anti-war / weapon vs personhood • courage & self-sacrifice",
+                        "ourTake": "A moving parable about a weapon that refuses to be one. Simple, human, and deeply felt.",
+                        "poster": "/assets/posters/the-iron-giant.webp",
+                        "whereLine": ""
             },
-            "the-wild-robot": {
-                title: "The Wild Robot",
-                year: "",
-                poster: "/assets/posters/the-wild-robot.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "A modern fable about care, belonging, and what it means to be ‘alive’ in a changing world.",
-                theme: "dark"
+            "spirited-away": {
+                        "title": "Spirited Away",
+                        "year": 2001,
+                        "runtime": "2h 4m",
+                        "bbfc": "PG",
+                        "bbfcReason": "mild threat and scary scenes, plus brief injury detail (blood on an injured dragon)",
+                        "imdb": "9.0/10",
+                        "award": "Oscar® winner — Best Animated Feature",
+                        "synopsis": "A 10-year-old girl slips into a spirit bathhouse where her parents are turned into pigs—and must find the courage to work, survive, and bring them home.",
+                        "themes": "Growing up & resilience • identity (keeping your name/self) • greed & consumerism • courage under pressure • compassion in a morally grey world • spirits/nature & respect for what we can’t “own”",
+                        "ourTake": "A gorgeous, unsettling coming-of-age dream—brilliant for talking about greed, identity, and growing up.",
+                        "poster": "/assets/posters/spirited-away.webp",
+                        "whereLine": ""
             },
             "my-neighbor-totoro": {
-                title: "My Neighbor Totoro",
-                year: 1988,
-                poster: "/assets/posters/my-neighbor-totoro.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "A calm, magical classic about childhood, nature, and the comfort of the unseen.",
-                theme: "dark"
+                        "title": "My Neighbor Totoro",
+                        "year": 1998,
+                        "runtime": "1h 26m",
+                        "bbfc": "U",
+                        "bbfcReason": "very mild threat / upsetting scenes, a briefly missing child",
+                        "imdb": "8.1/10",
+                        "award": "Oscar® winner — Best Animated Feature",
+                        "synopsis": "Two sisters move to the countryside while their mother is unwell — and discover the nearby woods are alive with shy, gentle spirits. A small family story that turns worry into wonder, with a few tense moments that resolve warmly.",
+                        "themes": "Growing up & resilience • sisterhood • moving home • nature as comfort • imagination & wonder • family illness (handled gently) • kindness to the unknown",
+                        "ourTake": "A soft, restorative film that takes children’s worries seriously — then answers them with wonder.",
+                        "poster": "/assets/posters/my-neighbor-totoro.webp",
+                        "whereLine": ""
+            },
+            "la-la-land": {
+                        "title": "La La Land",
+                        "year": 2016,
+                        "runtime": "2h 8m",
+                        "bbfc": "12A",
+                        "bbfcReason": "",
+                        "imdb": "8.0/10",
+                        "award": "BAFTA — Best Film • Oscar® — Best Directing",
+                        "synopsis": "In Los Angeles, a jazz pianist and an aspiring actress fall in love while chasing careers that don’t always fit neatly together. A romantic, music-led story that’s mostly light — with one moment of strong language that pushes the rating up.",
+                        "themes": "Dreams vs relationships • ambition & compromise • creativity & craft • “what if?” paths • persistence after setbacks • love that isn’t simple • the price of success",
+                        "ourTake": "A joyful musical with a bittersweet honesty: sometimes growing up means choosing — and letting something go.",
+                        "poster": "/assets/posters/la-la-land.webp",
+                        "whereLine": ""
             },
             "its-a-wonderful-life": {
-                title: "It’s a Wonderful Life",
-                year: 1946,
-                poster: "/assets/posters/its-a-wonderful-life.webp",
-                awardLine: "",
-                imdb: "",
-                runtime: "",
-                bbfc: "",
-                whereLine: "",
-                blurb: "A classic about community, despair, and hope — best for co‑viewing with gentle context.",
-                theme: "dark"
+                        "title": "It’s a Wonderful Life",
+                        "year": 1946,
+                        "runtime": "2h 10m",
+                        "bbfc": "U",
+                        "bbfcReason": "suicide theme is central but treated sensitively with a reassuring outcome",
+                        "imdb": "8.6/10",
+                        "award": "Oscar® — Best Picture",
+                        "synopsis": "On a desperate night, a man who feels he’s failed is shown how many lives he’s changed — and what the world would look like without him. It starts dark, but lands warm, funny, and deeply life-affirming.",
+                        "themes": "Self-worth & belonging • kindness and community • money vs values • mental health (handled with hope) • gratitude • family responsibility • the ripple effect of small choices",
+                        "ourTake": "Surprisingly tough at the start — but one of the best films for talking about kindness, money, and what “success” really means.",
+                        "poster": "/assets/posters/its-a-wonderful-life.webp",
+                        "whereLine": ""
+            },
+            "wall-e": {
+                        "title": "WALL·E",
+                        "year": 2008,
+                        "runtime": "1h 38m",
+                        "bbfc": "U",
+                        "bbfcReason": "very mild threat/violence",
+                        "imdb": "8.4/10",
+                        "award": "BAFTA — Best Animated Film",
+                        "synopsis": "Alone on an abandoned Earth, a small waste-collecting robot keeps going — until a sleek new robot arrives and changes his world. A near-silent love story that grows into a funny, hopeful sci-fi adventure about what humans leave behind.",
+                        "themes": "Love & connection • loneliness • protecting nature • consumerism and waste • humans + technology • bravery without words • rebuilding a future",
+                        "ourTake": "One of the best “first sci-fi” films for kids: simple to follow, rich to talk about afterwards.",
+                        "poster": "/assets/posters/wall-e.webp",
+                        "whereLine": ""
             }
         };
 
         // Shelves: you can repeat films across shelves (BFI/MUBI style).
         const shelves = {
-            "rail-new": ["zootropolis", "flow", "la-la-land"],
-            "rail-animation": ["zootropolis", "my-neighbor-totoro", "wall-e"],
-            "rail-planet": ["wall-e", "flow", "the-wild-robot"],
-            "rail-adult": ["la-la-land", "its-a-wonderful-life", "wall-e"]
+            "rail-new": [
+                        "flow",
+                        "zootropolis",
+                        "spirited-away"
+            ],
+            "rail-animation": [
+                        "zootropolis",
+                        "spirited-away",
+                        "my-neighbor-totoro"
+            ],
+            "rail-animals": [
+                        "flow"
+            ],
+            "rail-robots": [
+                        "wall-e",
+                        "the-iron-giant"
+            ],
+            "rail-adult": [
+                        "la-la-land",
+                        "its-a-wonderful-life"
+            ]
         };
 
         function cardHTML(id) {
             const f = films[id];
 
-            const awardLine = f.awardLine ? `<div class="peek__award">${escapeHtml(f.awardLine)}</div>` : "";
-            const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
-            const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
-            const runtime = f.runtime ? `<span class="peek__pill">${escapeHtml(f.runtime)}</span>` : "";
-            const bbfc = f.bbfc ? `<span class="peek__pill"><span class="bbfc-badge bbfc-${escapeHtml(f.bbfc).toLowerCase()}" aria-label="BBFC ${escapeHtml(f.bbfc)}">${escapeHtml(f.bbfc)}</span></span>` : "";
-            const where = f.whereLine ? `<div class="peek__where">${escapeHtml(f.whereLine)}</div>` : "";
-            const blurb = f.blurb ? `<div class="peek__blurb">${escapeHtml(f.blurb)}</div>` : "";
+            const peekTitle = `<div class="peek__title">${escapeHtml(f.title)}</div>`;
+const awardLine = f.award ? `<div class="peek__award">${escapeHtml(f.award)}</div>` : "";
+const synopsis = f.synopsis ? `<div class="peek__synopsis">${escapeHtml(f.synopsis)}</div>` : "";
+const themes = f.themes ? `<div class="peek__themes"><span class="peek__label">Themes:</span> ${escapeHtml(f.themes)}</div>` : "";
+const take = f.ourTake ? `<div class="peek__take"><span class="peek__label">Our take:</span> ${escapeHtml(f.ourTake)}</div>` : "";
 
-            const metaRow = (imdb || year || runtime || bbfc)
-                ? `<div class="peek__meta">${imdb}${year}${runtime}${bbfc}</div>`
-                : "";
+const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
+const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
+const runtime = f.runtime ? `<span class="peek__pill">${escapeHtml(f.runtime)}</span>` : "";
+const bbfc = f.bbfc ? (() => {
+    const badge = (f.bbfcReason && String(f.bbfcReason).trim())
+        ? `<span class="bbfc-badge bbfc-${escapeHtml(f.bbfc).toLowerCase()}" data-tooltip="${escapeHtml(f.bbfcReason)}" aria-label="BBFC ${escapeHtml(f.bbfc)}: ${escapeHtml(f.bbfcReason)}" tabindex="0">${escapeHtml(f.bbfc)}</span>`
+        : `<span class="bbfc-badge bbfc-${escapeHtml(f.bbfc).toLowerCase()}" aria-label="BBFC ${escapeHtml(f.bbfc)}">${escapeHtml(f.bbfc)}</span>`;
+    return `<span class="peek__pill">${badge}</span>`;
+})() : "";
 
-            const posterImg = f.poster
-                ? `<img src="${f.poster}" alt="${escapeHtml(f.title)} poster" loading="lazy" decoding="async">`
+const metaRow = (imdb || year || runtime || bbfc)
+    ? `<div class="peek__meta">${imdb}${year}${runtime}${bbfc}</div>`
+    : "";
+
+const where = f.whereLine ? `<div class="peek__where">${escapeHtml(f.whereLine)}</div>` : "";
+
+const posterImg = f.poster
+                ? `<img src="${escapeHtml(f.poster)}" alt="${escapeHtml(f.title)} poster" loading="lazy" decoding="async" onerror="this.style.opacity=0;this.style.pointerEvents='none';">`
                 : "";
 
             const themeAttr = f.theme ? ` data-theme="${escapeHtml(f.theme)}"` : "";
@@ -937,10 +1085,13 @@
                   <div class="poster">
                     ${posterImg}
                     <div class="peek" role="note" aria-hidden="true">
+                      ${peekTitle}
                       ${awardLine}
+                      ${synopsis}
+                      ${themes}
+                      ${take}
                       ${metaRow}
                       ${where}
-                      ${blurb}
                     </div>
                   </div>
                   <div class="meta">
@@ -962,7 +1113,7 @@
         document.addEventListener("keydown", (e) => {
             if (e.key !== "Escape") return;
             const active = document.activeElement;
-            if (active && active.classList && active.classList.contains("card__link")) {
+            if (active && active.classList && (active.classList.contains("card__link") || active.classList.contains("bbfc-badge"))) {
                 active.blur();
             }
         });
