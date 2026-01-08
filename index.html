@@ -397,7 +397,7 @@
     overflow-x: auto;
     overflow-y: visible; /* avoid nested vertical scrollbars */
     scroll-snap-type: x mandatory;
-    padding: 0.5rem 0 6.5rem;
+    padding: 0.5rem 0 1.5rem;
     -webkit-overflow-scrolling: touch;
 
             scrollbar-width: none; /* Firefox */
@@ -591,15 +591,17 @@
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
+            transition: transform 180ms ease;
+            transform-origin: center;
+            z-index: 1;
+        }
+
         .card:focus-within {
             --hover-scale: 1.16;
             --hover-shift-y: -10px;
             z-index: 50;
         }
-            transition: transform 180ms ease;
-            transform-origin: center;
-            z-index: 1;
-        }
+
         .card:hover,
         .card:focus-within {
             transform: scale(1.16) translateY(-10px);
@@ -1252,7 +1254,7 @@ const posterImg = f.poster
 
             rail.addEventListener('scroll', () => updateArrowState(shelf, rail), { passive: true });
 
-            rail.addEventListener('wheel', (e) => {
+rail.addEventListener('wheel', (e) => {
                 const count = list.children.length;
                 if (count <= 4) return;
 
