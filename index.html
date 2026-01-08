@@ -825,50 +825,70 @@ text-overflow: ellipsis;
     }
 }
 
-/* FIX 1: Peek alignment for right-side cards */
-.card.align-peek-right .peek {
-    left: auto;
-    right: 0;
-}
-
-.card.align-peek-center .peek {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%) translateY(10px);
-}
-
-.card.align-peek-center:hover .peek,
-.card.align-peek-center:focus-within .peek {
-    transform: translateX(-50%) translateY(0);
-}
-
-/* FIX 2: Expand truncated text on hover */
+/* --- Expandable truncation + tooltip --- */
 .peek__synopsis,
 .peek__themes,
-.peek__take {
-    transition: all 200ms ease;
+.peek__take { position: relative; }
+
+.expandable.is-truncated { cursor: pointer; }
+
+/* Ensure multi-line clamps show ellipsis (plus our fallback dot) */
+.clamp-3,
+.clamp-2{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.peek:hover .peek__synopsis {
-    -webkit-line-clamp: 6;
-    font-size: 0.85rem;
+.clamp-3{ -webkit-line-clamp: 3; line-clamp: 3; }
+.clamp-2{ -webkit-line-clamp: 2; line-clamp: 2; }
+
+.peek__synopsis.is-truncated::after,
+.peek__take.is-truncated::after{
+  content: "…";
+  position: absolute;
+  right: 0.1rem;
+  bottom: 0;
+  padding-left: 1.2rem;
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0.70) 55%);
+  pointer-events: none;
 }
 
-.peek:hover .peek__themes {
-    -webkit-line-clamp: 4;
-    white-space: normal;
-    font-size: 0.82rem;
+/* Tooltip (hover/click to expand truncated text) */
+.ffj-tooltip{
+  position: fixed;
+  z-index: 9999;
+  max-width: min(440px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(12, 12, 14, 0.92);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+  color: rgba(255,255,255,0.95);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+.ffj-tooltip[hidden]{ display:none; }
+.ffj-tooltip__label{
+  font-weight: 750;
+  margin-bottom: 6px;
+  color: rgba(72, 211, 199, 0.95);
+}
+.ffj-tooltip__text{ color: rgba(255,255,255,0.92); }
+
+/* Mobile: tap to open peek (first tap), tap again to follow link */
+@media (pointer: coarse) {
+  .card.is-active { z-index: 50; }
+  .card.is-active .peek{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }
 
-.peek:hover .peek__take {
-    -webkit-line-clamp: 4;
-    font-size: 0.82rem;
-}
-
-/* Prevent main content overflow from expanded cards */
-.site-main {
-    overflow-x: hidden;
-}
 </style>
 </head>
 <body>
@@ -952,6 +972,18 @@ text-overflow: ellipsis;
 </footer>
 <script>
         function escapeHtml(str){
+            return String(str)
+              .replace(/&/g,'&amp;')
+              .replace(/</g,'&lt;')
+              .replace(/>/g,'&gt;')
+              .replace(/"/g,'&quot;')
+              .replace(/'/g,'&#39;');
+        }
+
+        
+        
+function escapeAttr(str){
+            // attribute-safe encoding (quotes, ampersands, angle brackets)
             return String(str)
               .replace(/&/g,'&amp;')
               .replace(/</g,'&lt;')
@@ -1103,26 +1135,14 @@ text-overflow: ellipsis;
             ]
         };
 
-        function cardHTML(id, index, totalInShelf) {
+        function cardHTML(id) {
             const f = films[id];
-
-            // Determine peek alignment based on position in shelf
-            let alignClass = '';
-            if (totalInShelf >= 3) {
-                if (index === totalInShelf - 1) {
-                    alignClass = 'align-peek-right';
-                } else if (index > 0) {
-                    alignClass = 'align-peek-center';
-                }
-            } else if (totalInShelf === 2 && index === 1) {
-                alignClass = 'align-peek-right';
-            }
 
             const peekTitle = `<div class="peek__title">${escapeHtml(f.title)}</div>`;
 const awardLine = f.award ? `<div class="peek__award">${escapeHtml(f.award)}</div>` : "";
-const synopsis = f.synopsis ? `<div class="peek__synopsis">${escapeHtml(f.synopsis)}</div>` : "";
-const themes = f.themes ? `<div class="peek__themes"><span class="peek__label">Themes:</span> ${escapeHtml(f.themes)}</div>` : "";
-const take = f.ourTake ? `<div class="peek__take"><span class="peek__label">Our take:</span> ${escapeHtml(f.ourTake)}</div>` : "";
+const synopsis = f.synopsis ? `<div class="peek__synopsis expandable clamp-3" data-label="Synopsis" data-full="${escapeAttr(f.synopsis)}" tabindex="0">${escapeHtml(f.synopsis)}</div>` : "";
+const themes = f.themes ? `<div class="peek__themes expandable" data-label="Themes" data-full="${escapeAttr(f.themes)}" tabindex="0"><span class="peek__label">Themes:</span> ${escapeHtml(f.themes)}</div>` : "";
+const take = f.ourTake ? `<div class="peek__take expandable clamp-2" data-label="Our take" data-full="${escapeAttr(f.ourTake)}" tabindex="0"><span class="peek__label">Our take:</span> ${escapeHtml(f.ourTake)}</div>` : "";
 
 const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
 const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
@@ -1147,7 +1167,7 @@ const posterImg = f.poster
             const themeAttr = f.theme ? ` data-theme="${escapeHtml(f.theme)}"` : "";
 
             return `
-              <li class="card ${alignClass}"${themeAttr}>
+              <li class="card"${themeAttr}>
                 <a class="card__link" href="/films/${id}/" aria-label="${escapeHtml(f.title)} (${escapeHtml(String(f.year || ""))})">
                   <div class="poster">
                     ${posterImg}
@@ -1173,8 +1193,7 @@ const posterImg = f.poster
         for (const railId in shelves) {
             const el = document.getElementById(railId);
             if (!el) continue;
-            const filmIds = shelves[railId];
-            el.innerHTML = filmIds.map((id, index) => cardHTML(id, index, filmIds.length)).join("");
+            el.innerHTML = shelves[railId].map(cardHTML).join("");
         }
 
         // Small accessibility enhancement: press Esc to dismiss an open "peek" (blur focused card).
@@ -1291,6 +1310,191 @@ const posterImg = f.poster
 
         setupHoverClamping();
 
+
+
+// --- Truncation detection & tooltip (hover/focus/click, incl. mobile tap) ---
+const tooltip = document.getElementById('ffj-tooltip');
+let tooltipOpenFor = null;
+let hideTimer = null;
+
+function isTruncated(el){
+  // For line-clamped blocks, scrollHeight remains the full height.
+  return (el.scrollHeight - el.clientHeight) > 1 || (el.scrollWidth - el.clientWidth) > 1;
+}
+
+function refreshTruncation(){
+  document.querySelectorAll('.expandable').forEach(el=>{
+    const truncated = isTruncated(el);
+    el.classList.toggle('is-truncated', truncated);
+    // keyboard hint
+    if (truncated) {
+      el.setAttribute('aria-haspopup', 'true');
+    } else {
+      el.removeAttribute('aria-haspopup');
+    }
+  });
+}
+
+function positionTooltip(target){
+  const pad = 12;
+  const rect = target.getBoundingClientRect();
+  // temp position for measurement
+  tooltip.style.left = pad + "px";
+  tooltip.style.top = pad + "px";
+  const tipW = tooltip.offsetWidth;
+  const tipH = tooltip.offsetHeight;
+
+  // prefer below, fallback above
+  let top = rect.bottom + 10;
+  if (top + tipH + pad > window.innerHeight) {
+    top = rect.top - tipH - 10;
+  }
+  top = Math.max(pad, Math.min(top, window.innerHeight - tipH - pad));
+
+  let left = rect.left;
+  // align with target, but keep inside viewport
+  left = Math.max(pad, Math.min(left, window.innerWidth - tipW - pad));
+
+  tooltip.style.left = left + "px";
+  tooltip.style.top = top + "px";
+}
+
+function showTooltipFor(target){
+  if (!target || !target.classList.contains('is-truncated')) return;
+
+  const label = target.dataset.label || "";
+  const full = target.dataset.full || target.textContent || "";
+  tooltip.innerHTML = `
+    ${label ? `<div class="ffj-tooltip__label">${escapeHtml(label)}</div>` : ``}
+    <div class="ffj-tooltip__text">${escapeHtml(full)}</div>
+  `;
+  tooltip.hidden = false;
+  tooltip.setAttribute('aria-hidden','false');
+  tooltipOpenFor = target;
+
+  positionTooltip(target);
+
+  // link trigger for screen readers
+  target.setAttribute('aria-describedby', 'ffj-tooltip');
+}
+
+function hideTooltip(){
+  if (tooltipOpenFor) tooltipOpenFor.removeAttribute('aria-describedby');
+  tooltipOpenFor = null;
+  tooltip.hidden = true;
+  tooltip.setAttribute('aria-hidden','true');
+}
+
+function scheduleHide(){
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(()=>{
+    // keep open if mouse is over tooltip itself
+    if (tooltip.matches(':hover')) return;
+    hideTooltip();
+  }, 140);
+}
+
+tooltip.addEventListener('mouseenter', ()=> clearTimeout(hideTimer));
+tooltip.addEventListener('mouseleave', scheduleHide);
+
+document.addEventListener('pointerover', (e)=>{
+  const target = e.target.closest('.expandable.is-truncated');
+  if (!target) return;
+  // don't spam if already open for this element
+  if (tooltipOpenFor === target) return;
+  clearTimeout(hideTimer);
+  showTooltipFor(target);
+});
+
+document.addEventListener('pointerout', (e)=>{
+  const leftExpandable = e.target.closest('.expandable.is-truncated');
+  if (!leftExpandable) return;
+  // if moving into tooltip, keep it
+  const toEl = e.relatedTarget;
+  if (toEl && (toEl.closest && toEl.closest('#ffj-tooltip'))) return;
+  scheduleHide();
+});
+
+document.addEventListener('focusin', (e)=>{
+  const target = e.target.closest('.expandable.is-truncated');
+  if (!target) return;
+  clearTimeout(hideTimer);
+  showTooltipFor(target);
+});
+
+document.addEventListener('focusout', (e)=>{
+  const target = e.target.closest('.expandable.is-truncated');
+  if (!target) return;
+  scheduleHide();
+});
+
+// Click/tap toggles tooltip and prevents navigating the card link when tapping text
+document.addEventListener('click', (e)=>{
+  const target = e.target.closest('.expandable.is-truncated');
+  if (!target) return;
+  e.preventDefault();
+  e.stopPropagation();
+  if (tooltipOpenFor === target && !tooltip.hidden) {
+    hideTooltip();
+  } else {
+    clearTimeout(hideTimer);
+    showTooltipFor(target);
+  }
+});
+
+// Dismiss tooltip when clicking elsewhere
+document.addEventListener('click', (e)=>{
+  if (tooltip.hidden) return;
+  if (e.target.closest('#ffj-tooltip')) return;
+  if (e.target.closest('.expandable.is-truncated')) return;
+  hideTooltip();
+}, { capture: true });
+
+document.addEventListener('keydown', (e)=>{
+  if (e.key === 'Escape') {
+    hideTooltip();
+    document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
+  }
+});
+
+// Mobile: first tap opens peek; second tap follows link
+document.addEventListener('click', (e)=>{
+  const link = e.target.closest('.card > a');
+  if (!link) return;
+
+  if (!window.matchMedia('(pointer: coarse)').matches) return;
+  if (e.target.closest('.expandable')) return; // handled above
+
+  const card = link.closest('.card');
+  if (!card) return;
+
+  if (!card.classList.contains('is-active')) {
+    e.preventDefault();
+    document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
+    card.classList.add('is-active');
+    // refresh truncation once peek becomes visible
+    requestAnimationFrame(refreshTruncation);
+  }
+});
+
+// Tap outside to close active peek on mobile
+document.addEventListener('click', (e)=>{
+  if (!window.matchMedia('(pointer: coarse)').matches) return;
+  if (e.target.closest('.card.is-active')) return;
+  document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
+}, { capture: true });
+
+// Keep truncation state correct when layout changes
+window.addEventListener('resize', ()=> {
+  hideTooltip();
+  refreshTruncation();
+});
+
+// Initial pass (after shelves render)
+setTimeout(refreshTruncation, 50);
+
 </script>
+
+  <div id="ffj-tooltip" class="ffj-tooltip" role="tooltip" hidden aria-hidden="true"></div>
 </body>
 </html>
