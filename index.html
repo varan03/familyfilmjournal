@@ -1,1502 +1,244 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="Family Film Journal - Curated film recommendations and viewing guides for parents of children aged 6–12. Cinema that sparks family conversations." name="description"/>
-<title>Family Film Journal | Cinema that sparks family conversations</title>
-<!-- Preconnect for fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="Family Film Journal - Curated film recommendations and viewing guides for parents of children aged 6–12. Cinema that sparks family conversations." name="description"/>
+    <title>Family Film Journal | Cinema that sparks family conversations</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <style>
         :root {
-            /* Surfaces */
             --shelf-bg: #1e2225;
-            --color-top: #f6f1fa;          /* light lilac */
-            --color-bottom: #1f2124;       /* dark grey */
-            --color-card: #faf8f5;         /* warm off-white for cards/panels */
-
-            /* Text */
+            --color-top: #f6f1fa;
+            --color-bottom: #1f2124;
+            --color-card: #faf8f5;
             --color-ink: #1a1a1a;
             --color-ink-on-dark: #f3f3f3;
             --color-muted: #6b6b6b;
             --color-muted-on-dark: rgba(243, 243, 243, 0.72);
-
-            /* Accents / borders */
             --color-accent: #8b4513;
             --color-accent-light: rgba(139, 69, 19, 0.18);
             --color-border: rgba(26, 26, 26, 0.12);
             --color-border-on-dark: rgba(243, 243, 243, 0.16);
-
-            /* Type */
             --font-logo: 'DM Serif Display', Georgia, serif;
             --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-            /* Layout */
             --wrap-narrow: 760px;
             --wrap-wide: 1360px;
             --spacing-unit: 1.5rem;
         }
 
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            font-size: 18px;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-body);
-            line-height: 1.6;
-            color: var(--color-ink);
-            background: var(--color-top);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Skip link for accessibility */
-        .skip-link {
-            position: absolute;
-            top: -100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--color-ink);
-            color: var(--color-card);
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            border-radius: 0 0 4px 4px;
-            z-index: 1000;
-            transition: top 0.2s ease;
-        }
-
-        .skip-link:focus {
-            top: 0;
-            outline: 3px solid var(--color-accent);
-            outline-offset: 2px;
-        }
-
-        /* Focus styles for accessibility */
-        :focus-visible {
-            outline: 3px solid var(--color-accent);
-            outline-offset: 3px;
-        }
-
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; scroll-behavior: smooth; }
+        body { font-family: var(--font-body); line-height: 1.6; color: var(--color-ink); background: var(--color-top); min-height: 100vh; display: flex; flex-direction: column; }
         
-        /* Layout wrappers */
-        .wrap {
-            width: 100%;
-            margin: 0 auto;
-        }
+        .skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); background: var(--color-ink); color: var(--color-card); padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 0 0 4px 4px; z-index: 1000; transition: top 0.2s ease; }
+        .skip-link:focus { top: 0; outline: 3px solid var(--color-accent); outline-offset: 2px; }
+        :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+        .wrap { width: 100%; margin: 0 auto; }
         .wrap--narrow { max-width: var(--wrap-narrow); }
         .wrap--wide { max-width: min(96vw, var(--wrap-wide)); }
-/* Header */
-        .site-header {
-            background: var(--color-top);
-            padding: calc(var(--spacing-unit) * 3) var(--spacing-unit) calc(var(--spacing-unit) * 2);
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
-        }
 
-        .site-title {
-            font-family: var(--font-logo);
-            font-size: clamp(2.1rem, 5vw, 3.1rem);
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            color: var(--color-ink);
-            margin-bottom: 0.5rem;
-        }
+        .site-header { background: var(--color-top); padding: calc(var(--spacing-unit) * 3) var(--spacing-unit) calc(var(--spacing-unit) * 2); text-align: center; border-bottom: 1px solid var(--color-border); }
+        .site-title { font-family: var(--font-logo); font-size: clamp(2.1rem, 5vw, 3.1rem); font-weight: 400; letter-spacing: -0.01em; color: var(--color-ink); margin-bottom: 0.5rem; }
+        .tagline { font-family: var(--font-logo); font-size: 1.2rem; font-weight: 400; font-style: italic; color: rgba(26, 26, 26, 0.86); margin-bottom: 1.25rem; }
+        .subtitle { font-size: 1rem; color: var(--color-muted); max-width: 500px; margin: 0 auto; }
 
-        .tagline {
-            font-family: var(--font-logo);
-            font-size: 1.2rem;
-            font-weight: 400;
-            font-style: italic;
-            color: rgba(26, 26, 26, 0.86);
-            margin-bottom: 1.25rem;
-        }
+        .site-main { flex: 1; width: 100%; background: var(--color-bottom); color: var(--color-ink-on-dark); padding: calc(var(--spacing-unit) * 2.25) var(--spacing-unit) calc(var(--spacing-unit) * 3); }
+        section { margin-bottom: calc(var(--spacing-unit) * 2.5); }
+        h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: inherit; position: relative; padding-bottom: 0.5rem; }
+        h2::after { content: ''; position: absolute; bottom: 0; left: 0; width: 2.5rem; height: 2px; background-color: var(--color-accent); }
 
-        .subtitle {
-            font-size: 1rem;
-            color: var(--color-muted);
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .status { display: inline-flex; align-items: center; gap: 0.5rem; background: white; border: 1px solid var(--color-border); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.85rem; color: var(--color-muted); margin-top: 1rem; }
+        .status-dot { width: 8px; height: 8px; background: var(--color-accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* Main content */
-        .site-main {
-            flex: 1;
-            width: 100%;
-            background: var(--color-bottom);
-            color: var(--color-ink-on-dark);
-            padding: calc(var(--spacing-unit) * 2.25) var(--spacing-unit) calc(var(--spacing-unit) * 3);
-        }
+        footer { border-top: 1px solid var(--color-border); padding: calc(var(--spacing-unit) * 1.5) var(--spacing-unit); text-align: center; margin-top: auto; }
+        .creator { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 0.5rem; }
+        .creator-name { color: var(--color-ink); font-weight: 500; }
+        .copyright { font-size: 0.8rem; color: var(--color-muted); }
 
-        section {
-            margin-bottom: calc(var(--spacing-unit) * 2.5);
-        }
+        .site-nav { margin-top: calc(var(--spacing-unit) * 1.5); display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+        .site-nav a { text-decoration: none; color: var(--color-muted); font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 999px; }
+        .site-nav a:hover { color: var(--color-ink); background: rgba(0, 0, 0, 0.04); }
 
-        h2 {
-            font-family: var(--font-body);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: inherit;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 2.5rem;
-            height: 2px;
-            background-color: var(--color-accent);
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Feature list */
-        .features {
-            display: grid;
-            gap: 1.25rem;
-            margin-top: 1.5rem;
-        }
-
-        .feature {
-            background: white;
-            padding: 1.25rem 1.5rem;
-            border-left: 3px solid var(--color-accent-light);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-
-        .feature-title {
-            font-family: var(--font-body);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.35rem;
-            color: inherit;
-        }
-
-        .feature-desc {
-            font-size: 0.95rem;
-            color: var(--color-muted);
-            line-height: 1.6;
-        }
-
-        /* Status badge */
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: white;
-            border: 1px solid var(--color-border);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.85rem;
-            color: var(--color-muted);
-            margin-top: 1rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--color-accent);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Accessibility section */
-        .accessibility-commitment {
-            background: linear-gradient(135deg, #f5f3f0 0%, #faf8f5 100%);
-            padding: 1.5rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-        }
-
-        .accessibility-commitment p {
-            font-size: 0.95rem;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--color-border);
-            padding: calc(var(--spacing-unit) * 1.5) var(--spacing-unit);
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .creator {
-            font-size: 0.9rem;
-            color: var(--color-muted);
-            margin-bottom: 0.5rem;
-        }
-
-        .creator-name {
-            color: var(--color-ink);
-            font-weight: 500;
-        }
-
-        .copyright {
-            font-size: 0.8rem;
-            color: var(--color-muted);
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            html {
-                font-size: 16px;
-            }
-
-            header {
-                padding: calc(var(--spacing-unit) * 2) var(--spacing-unit) var(--spacing-unit);
-            }
-
-            .feature {
-                padding: 1rem 1.25rem;
-            }
-        }
-
-        /* Reduced motion preference */
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-            
-            .status-dot {
-                animation: none;
-            }
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-            /* Surfaces */
-            --shelf-bg: #1e2225;
-            --color-top: #f6f1fa;          /* light lilac */
-            --color-bottom: #1f2124;       /* dark grey */
-            --color-card: #faf8f5;         /* warm off-white for cards/panels */
-
-            /* Text */
-            --color-ink: #1a1a1a;
-            --color-ink-on-dark: #f3f3f3;
-            --color-muted: #6b6b6b;
-            --color-muted-on-dark: rgba(243, 243, 243, 0.72);
-
-            /* Accents / borders */
-            --color-accent: #8b4513;
-            --color-border: rgba(26, 26, 26, 0.12);
-            --color-border-on-dark: rgba(243, 243, 243, 0.16);
-
-            /* Type */
-            --font-logo: 'DM Serif Display', Georgia, serif;
-            --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-            /* Layout */
-            --wrap-narrow: 760px;
-            --wrap-wide: 1360px;
-            --spacing-unit: 1.5rem;
-        }
-            
-            .feature {
-                border-left-width: 4px;
-            }
-        }
-    
-        /* Navigation */
-        .site-nav {
-            margin-top: calc(var(--spacing-unit) * 1.5);
-            display: flex;
-            justify-content: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-
-        .site-nav a {
-            text-decoration: none;
-            color: var(--color-muted);
-            font-weight: 600;
-            padding: 0.4rem 0.75rem;
-            border-radius: 999px;
-        }
-
-        .site-nav a:hover {
-            color: var(--color-ink);
-            background: rgba(0, 0, 0, 0.04);
-        }
-
-        .site-nav a:focus-visible {
-            outline: 3px solid var(--color-accent);
-            outline-offset: 3px;
-        }
-
-        .site-nav .nav-muted {
-            opacity: 0.7;
-        }
-
-        /* Shelves (BFI/MUBI-style rows) */
-        .shelf { margin: 0 0 calc(var(--spacing-unit) * 2); }
-
-        .shelf__head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .shelf__head h2 {
-            margin: 0;
-            font-family: var(--font-body);
-            font-weight: 800;
-            font-size: 1.35rem;
-            color: var(--color-ink-on-dark);
-            padding-bottom: 0;
-        }
-
-        .shelf__link {
-            font-weight: 600;
-            text-decoration: none;
-            border-bottom: 1px solid currentColor;
-            color: var(--color-ink-on-dark);
-            opacity: 0.85;
-        }
-
-        .shelf__link:hover {
-            opacity: 1;
-        }
-
-        .shelf__link:focus-visible {
-            outline: 3px solid var(--color-accent);
-            outline-offset: 4px;
-            border-bottom-color: transparent;
-        }
-
+        .shelf { margin: 0 0 calc(var(--spacing-unit) * 2); position: relative; }
+        .shelf__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+        .shelf__head h2 { margin: 0; font-family: var(--font-body); font-weight: 800; font-size: 1.35rem; color: var(--color-ink-on-dark); padding-bottom: 0; }
+        .shelf__link { font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; color: var(--color-ink-on-dark); opacity: 0.85; }
+        
         .shelf__rail {
-    overflow-x: auto;
-    overflow-y: visible; /* avoid nested vertical scrollbars */
-    scroll-snap-type: x mandatory;
-    padding: 0.5rem 0 1.5rem;
-    -webkit-overflow-scrolling: touch;
-
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge legacy */
+            overflow-x: auto;
+            overflow-y: visible;
             scroll-snap-type: x mandatory;
-        
+            padding: 0.5rem 0 1.5rem; /* Reduced Gap Fix */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
             position: relative;
-        
             padding-inline: 24px;
             scroll-padding-left: 24px;
             scroll-padding-right: 24px;
         }
-
         .shelf__rail::-webkit-scrollbar { display: none; }
 
-        .shelf__list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: clamp(260px, 28vw, 440px);
-    gap: 1rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    overflow: visible;
-}
-
-        .card {
-            position: relative;
-            scroll-snap-align: start;
+        .shelf__list { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(260px, 28vw, 440px); gap: 1rem; list-style: none; padding: 0; margin: 0; overflow: visible; }
         
-            transition: transform 180ms ease;
-            --hover-scale: 1;
-            --hover-shift-x: 0px;
-            --hover-shift-y: 0px;
-            transform: translate(var(--hover-shift-x), var(--hover-shift-y)) scale(var(--hover-scale));
-        }
+        .card { position: relative; scroll-snap-align: start; transition: transform 180ms ease; --hover-scale: 1; --hover-shift-x: 0px; --hover-shift-y: 0px; transform: translate(var(--hover-shift-x), var(--hover-shift-y)) scale(var(--hover-scale)); }
+        .card a.card__link { display: block; text-decoration: none; color: inherit; border-radius: 18px; }
+        
+        .poster { width: 100%; aspect-ratio: 16 / 9; border-radius: 18px; background: rgba(255,255,255,0.04); position: relative; overflow: visible; }
+        .poster img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 18px; }
 
-        .card a.card__link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            border-radius: 18px;
-        }
-
-        .card a.card__link:focus-visible {
-            outline: 3px solid var(--color-accent);
-            outline-offset: 4px;
-        }
-
-        .poster {
-            width: 100%;
-            aspect-ratio: 16 / 9; /* cover art: carousel-style */
-            border-radius: 18px;
-            background: rgba(255,255,255,0.04);
-            position: relative;
-            overflow: visible; /* allow the info panel to extend */
-        }
-
-        .poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            border-radius: 18px;
-            transform: translateZ(0);
-        }
-
-        .poster--placeholder::after {
-            content: "Poster";
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            color: var(--color-muted);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-
-        .meta { color: var(--color-ink-on-dark); 
-            margin-top: 0.6rem;
-        }
-
-        .title {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
+        .meta { color: var(--color-ink-on-dark); margin-top: 0.6rem; }
+        .title { font-weight: 700; line-height: 1.2; }
         .year { color: var(--color-muted-on-dark); font-size: 0.95rem; }
-
-        /* Prime-like hover panel (informational only)
-           Goal: readable metadata like Prime's expanded card.
-           - The image stays visible at the top.
-           - Info starts ~2/5 down the image and can extend below the image. */
-        :root { --peek-extra: 170px; } /* extra space below the image for text */
 
         .peek {
             position: absolute;
-            left: 0;
-            right: 0;
-            top: 42%;
-            bottom: calc(-1 * var(--peek-extra));
+            left: 0; right: 0; top: 42%;
+            bottom: -170px;
             border-radius: 0 0 18px 18px;
             padding: 0.8rem 0.9rem 0.85rem;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.00) 0%,
-                rgba(0, 0, 0, 0.22) 18%,
-                rgba(0, 0, 0, 0.62) 60%,
-                rgba(0, 0, 0, 0.78) 100%
-            );
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 60%, rgba(0,0,0,0.78) 100%);
             color: #fff;
             opacity: 0;
             transform: translateY(10px);
             pointer-events: none;
             transition: opacity 180ms ease, transform 180ms ease;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.35);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.35);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-        }
-
-        /* Optional per-film light theme (rare; use when the poster is already dark) */
-        .card[data-theme="light"] .peek {
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0.00) 0%,
-                rgba(255, 255, 255, 0.55) 30%,
-                rgba(255, 255, 255, 0.88) 100%
-            );
-            color: #0d1117;
-            text-shadow: none;
-        }
-
-        .peek__award {
-            font-size: 1.02rem;
-            font-weight: 800;
-            letter-spacing: 0.01em;
-            margin-bottom: 0.6rem;
-            color: #2dd4bf;
-        }
-
-        .peek__meta {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.45rem 0.6rem;
-            font-size: 0.98rem;
-            margin-bottom: 0.7rem;
+            flex-direction: column;
+            gap: 0.45rem;
         }
 
-        .peek__pill {
-            display: inline-flex;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.32);
-            border-radius: 999px;
-            padding: 0.16rem 0.6rem;
-            font-size: 0.95rem;
-            background: rgba(0,0,0,0.18);
-        }
-
-        .card[data-theme="light"] .peek__pill {
-            border-color: rgba(0,0,0,0.20);
-            background: rgba(255,255,255,0.22);
-        }
-
-        .peek__where {
-            font-size: 0.98rem;
-            opacity: 0.93;
-            margin-bottom: 0.7rem;
-        }
-
-        .peek__blurb {
-            font-size: 1.02rem;
-            line-height: 1.35;
-            opacity: 0.98;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .peek,
-        .title,
-        .year {
-            font-family: var(--font-body);
-        }
-
-        /* Trigger states */
+        /* --- Tooltip Trigger State Fix --- */
         .card:hover .peek,
         .card:focus-within .peek {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
-            transition: transform 180ms ease;
-            transform-origin: center;
             z-index: 1;
         }
+        .card:focus-within { --hover-scale: 1.16; --hover-shift-y: -10px; z-index: 50; }
+        .card:hover, .card:focus-within { transform: scale(1.16) translateY(-10px); z-index: 50; }
 
-        .card:focus-within {
-            --hover-scale: 1.16;
-            --hover-shift-y: -10px;
-            z-index: 50;
-        }
+        .peek__title { font-weight: 900; font-size: 1.05rem; }
+        .peek__award { font-size: 1.02rem; font-weight: 800; color: #2dd4bf; margin-bottom: 0.3rem; }
+        .peek__meta { display: flex; flex-wrap: wrap; gap: 0.45rem 0.6rem; margin-top: auto; }
+        .peek__pill { border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 0.16rem 0.6rem; font-size: 0.95rem; background: rgba(0,0,0,0.18); }
+        .peek__synopsis, .peek__themes, .peek__take { font-size: 0.92rem; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; }
+        .peek__synopsis { -webkit-line-clamp: 3; }
+        .peek__take { -webkit-line-clamp: 2; }
+        .peek__label { font-weight: 700; color: rgba(255,255,255,0.88); }
 
-        .card:hover,
-        .card:focus-within {
-            transform: scale(1.16) translateY(-10px);
-            z-index: 50;
-        }
+        .bbfc-badge { display:inline-flex; align-items:center; justify-content:center; width:1.65rem; height:1.65rem; border-radius:999px; font-weight:800; font-size:0.9rem; border:2px solid rgba(255,255,255,0.85); background: rgba(255,255,255,0.10); }
+        .bbfc-12a { background:#f97316; color:#ffffff; }
 
-        /* Reduce peek complexity on touch devices */
-        @media (hover: none) {
-            .peek { display: none; }
-        }
-    
-        /* About panel inside dark main */
-        .about {
-            margin-top: calc(var(--spacing-unit) * 3);
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--color-border-on-dark);
-            border-radius: 18px;
-            padding: calc(var(--spacing-unit) * 1.25);
-            max-width: var(--wrap-narrow);
-            color: var(--color-ink-on-dark);
-        }
-        .about h2, .about h3 { color: var(--color-ink-on-dark); font-family: var(--font-body); }
-        .about p, .about li { color: var(--color-ink-on-dark); }
+        /* Truncation styling */
+        .expandable.is-truncated { cursor: pointer; position: relative; }
+        .expandable.is-truncated::after { content: "…"; position: absolute; right: 0.1rem; bottom: 0; padding-left: 1.2rem; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0.70) 55%); }
 
+        .ffj-tooltip { position: fixed; z-index: 9999; max-width: min(440px, calc(100vw - 24px)); padding: 10px 12px; border-radius: 14px; background: rgba(12, 12, 14, 0.92); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.95); font-size: 0.88rem; backdrop-filter: blur(10px); }
+        .ffj-tooltip[hidden] { display:none; }
+        .ffj-tooltip__label { font-weight: 750; color: rgba(72, 211, 199, 0.95); margin-bottom: 4px; }
 
-        .bbfc-badge{
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            width:1.65rem;
-            height:1.65rem;
-            border-radius:999px;
-            font-weight:800;
-            font-size:0.9rem;
-            letter-spacing:0.02em;
-            line-height:1;
-            border:2px solid rgba(255,255,255,0.85);
-            background: rgba(255,255,255,0.10);
-        }
-        .bbfc-12a{
-            background:#f97316; /* orange-ish like BBFC rating colour */
-            color:#ffffff;
-            border-color: rgba(255,255,255,0.9);
-        }
-        .card[data-theme="light"] .bbfc-badge{
-            border-color: rgba(0,0,0,0.65);
-        }
-
-        /* Shelf arrows (shown only when needed) */
-        .shelf { position: relative; }
-
-        .shelf__arrow {
-            position: absolute;
-            top: 118px;
-            width: 44px;
-            height: 44px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.22);
-            background: rgba(15, 17, 19, 0.55);
-            color: #fff;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 160ms ease, transform 160ms ease, background 160ms ease;
-            z-index: 60;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            user-select: none;
-        }
-
-        .shelf__arrow:hover {
-            background: rgba(15, 17, 19, 0.72);
-            transform: scale(1.03);
-        }
-
-        .shelf__arrow:disabled { opacity: 0.2; cursor: default; }
-
-        .shelf__arrow--left { left: 6px; }
-        .shelf__arrow--right { right: 6px; }
-
-        .shelf.show-arrows:hover .shelf__arrow,
-        .shelf.show-arrows:focus-within .shelf__arrow {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .card:hover, .card:focus-within { z-index: 80; }
-
-        /* Subtle edge “peek” fades (shown only when overflow exists) */
-        .shelf__rail::before,
-        .shelf__rail::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 56px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 160ms ease;
-            z-index: 55; /* below arrows (60), above posters */
-        }
-
-        .shelf.has-overflow .shelf__rail::before {
-            left: 0;
-            background: linear-gradient(to right, rgba(30, 34, 37, 0.92), rgba(30, 34, 37, 0));
-        }
-
-        .shelf.has-overflow .shelf__rail::after {
-            right: 0;
-            background: linear-gradient(to left, rgba(30, 34, 37, 0.92), rgba(30, 34, 37, 0));
-        }
-
-        /* Show/hide per edge based on scroll position */
-        .shelf.has-overflow:not(.at-start) .shelf__rail::before { opacity: 1; }
-        .shelf.has-overflow:not(.at-end) .shelf__rail::after { opacity: 1; }
-/* Peek content layout */
-.peek { 
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-}
-.peek__title{
-    font-weight: 900;
-    font-size: 1.05rem;
-    line-height: 1.15;
-    letter-spacing: 0.2px;
-    margin-bottom: 0.05rem;
-}
-.peek__synopsis{
-    font-size: 0.92rem;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-text-overflow: ellipsis;
-        }
-.peek__themes{
-            font-size: 0.86rem;
-            line-height: 1.25;
-            opacity: 0.96;
-            margin-top: 0.15rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .peek__take{
-            font-size: 0.86rem;
-            line-height: 1.25;
-            opacity: 0.96;
-            margin-top: 0.15rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .peek__label{ color: rgba(255,255,255,0.88); font-weight: 700; }
-/* Push meta + where to the bottom of the expanded peek */
-.peek__meta{ margin-top: auto; }
-
-/* BBFC tooltip (shows details only on hover/focus) */
-.bbfc-badge[data-tooltip]{
-    position: relative;
-    outline: none;
-}
-.bbfc-badge[data-tooltip]::after,
-.bbfc-badge[data-tooltip]::before{
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 140ms ease;
-    z-index: 200;
-}
-.bbfc-badge[data-tooltip]::after{
-    content: attr(data-tooltip);
-    bottom: calc(100% + 10px);
-    background: rgba(0,0,0,0.88);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 12px;
-    padding: 0.6rem 0.75rem;
-    width: max-content;
-    max-width: 320px;
-    white-space: normal;
-    font-size: 0.92rem;
-    line-height: 1.25;
-    box-shadow: 0 14px 36px rgba(0,0,0,0.55);
-}
-.bbfc-badge[data-tooltip]::before{
-    bottom: calc(100% + 4px);
-    width: 10px;
-    height: 10px;
-    background: rgba(0,0,0,0.88);
-    border-left: 1px solid rgba(255,255,255,0.25);
-    border-top: 1px solid rgba(255,255,255,0.25);
-    transform: translateX(-50%) rotate(45deg);
-}
-.bbfc-badge[data-tooltip]:hover::after,
-.bbfc-badge[data-tooltip]:hover::before,
-.bbfc-badge[data-tooltip]:focus-visible::after,
-.bbfc-badge[data-tooltip]:focus-visible::before{
-    opacity: 1;
-}
-/* Prevent tooltip from going off-screen in very narrow viewports */
-@media (max-width: 420px){
-    .bbfc-badge[data-tooltip]::after{
-        left: 0;
-        transform: none;
-        max-width: 260px;
-    }
-    .bbfc-badge[data-tooltip]::before{
-        left: 1.2rem;
-        transform: rotate(45deg);
-    }
-}
-
-/* --- Expandable truncation + tooltip --- */
-.peek__synopsis,
-.peek__themes,
-.peek__take { position: relative; }
-
-.expandable.is-truncated { cursor: pointer; }
-
-/* Ensure multi-line clamps show ellipsis (plus our fallback dot) */
-.clamp-3,
-.clamp-2{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.clamp-3{ -webkit-line-clamp: 3; line-clamp: 3; }
-.clamp-2{ -webkit-line-clamp: 2; line-clamp: 2; }
-
-.peek__synopsis.is-truncated::after,
-.peek__take.is-truncated::after{
-  content: "…";
-  position: absolute;
-  right: 0.1rem;
-  bottom: 0;
-  padding-left: 1.2rem;
-  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0.70) 55%);
-  pointer-events: none;
-}
-
-/* Tooltip (hover/click to expand truncated text) */
-.ffj-tooltip{
-  position: fixed;
-  z-index: 9999;
-  max-width: min(440px, calc(100vw - 24px));
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(12, 12, 14, 0.92);
-  border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-  color: rgba(255,255,255,0.95);
-  font-size: 0.88rem;
-  line-height: 1.35;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  pointer-events: auto;
-}
-.ffj-tooltip[hidden]{ display:none; }
-.ffj-tooltip__label{
-  font-weight: 750;
-  margin-bottom: 6px;
-  color: rgba(72, 211, 199, 0.95);
-}
-.ffj-tooltip__text{ color: rgba(255,255,255,0.92); }
-
-/* Mobile: tap to open peek (first tap), tap again to follow link */
-@media (pointer: coarse) {
-  .card.is-active { z-index: 50; }
-  .card.is-active .peek{
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-}
-
-</style>
+        @media (hover: none) { .peek { display: none; } }
+    </style>
 </head>
 <body>
-<a class="skip-link" href="#main-content">Skip to main content</a>
-<header class="site-header" role="banner">
-<div class="wrap wrap--narrow">
-<h1 class="site-title">Family Film Journal</h1>
-<p class="tagline">Cinema that sparks family conversations</p>
-<p class="subtitle">Curated film recommendations and viewing guides for parents of children aged 6–12 — helping you share great cinema with context, not caution.</p>
-<nav aria-label="Primary" class="site-nav">
-<a href="/films/">Films</a>
-<a href="/collections/">Collections</a>
-<a href="/about/">About</a>
-<a aria-label="Search (coming soon)" class="nav-muted" href="#search" title="Search coming soon">Search</a>
-</nav>
-</div>
-</header>
-<main class="site-main" id="main-content" role="main">
-<div class="wrap wrap--wide">
-<section aria-labelledby="shelf-new" class="shelf">
-<div class="shelf__head">
-<h2 id="shelf-new">New on the Journal</h2>
-<a class="shelf__link" href="/films/">See all</a>
-</div>
-<div class="shelf__rail" data-rail="">
-<ul class="shelf__list" id="rail-new" role="list"></ul>
-</div>
-</section>
-<section aria-labelledby="shelf-animation" class="shelf">
-<div class="shelf__head">
-<h2 id="shelf-animation">Animation Classics</h2>
-<a class="shelf__link" href="/films/">See all</a>
-</div>
-<div class="shelf__rail" data-rail="">
-<ul class="shelf__list" id="rail-animation" role="list"></ul>
-</div>
-</section>
-<section aria-labelledby="shelf-animals" class="shelf">
-<div class="shelf__head">
-<h2 id="shelf-animals">Animals as Animals</h2>
-<a class="shelf__link" href="/films/">See all</a>
-</div>
-<div class="shelf__rail" data-rail="">
-<ul class="shelf__list" id="rail-animals" role="list"></ul>
-</div>
-</section><section aria-labelledby="shelf-robots" class="shelf">
-<div class="shelf__head">
-<h2 id="shelf-robots">Robots with Heart</h2>
-<a class="shelf__link" href="/films/">See all</a>
-</div>
-<div class="shelf__rail" data-rail="">
-<ul class="shelf__list" id="rail-robots" role="list"></ul>
-</div>
-</section>
-<section aria-labelledby="shelf-adult" class="shelf">
-<div class="shelf__head">
-<h2 id="shelf-adult">Grown-up classics kids can join</h2>
-<a class="shelf__link" href="/films/">See all</a>
-</div>
-<div class="shelf__rail" data-rail="">
-<ul class="shelf__list" id="rail-adult" role="list"></ul>
-</div>
-</section>
-<section aria-labelledby="about-heading" class="about">
-<h2 id="about-heading">About This Project</h2>
-<p>Family Film Journal is an editorial platform dedicated to helping parents discover films worth sharing with their children. We believe that great cinema — films crafted with care in their visuals, sound, rhythm, and storytelling — can be a powerful catalyst for family connection and young minds.</p>
-<p>Rather than simply flagging content warnings, we provide thoughtful context: the background, themes, and conversation starters that transform passive viewing into engaged discovery. Our recommendations span animation, world cinema, classics, and contemporary films — chosen for their artistic merit and potential to spark meaningful dialogue.</p>
-</section>
-<section aria-labelledby="accessibility-heading">
-<h2 id="accessibility-heading">Accessibility</h2>
-<div class="accessibility-commitment">
-<p>Family Film Journal is committed to digital accessibility. This site is designed to meet WCAG 2.1 AA standards, with semantic HTML, keyboard navigation, screen reader support, and respect for user preferences including reduced motion and high contrast modes.</p>
-<p>If you encounter any accessibility barriers, please contact us so we can improve.</p>
-</div>
-</section>
-</div>
-</main>
-<footer role="contentinfo">
-<p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
-<p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
-</footer>
-<script>
-        function escapeHtml(str){
-            return String(str)
-              .replace(/&/g,'&amp;')
-              .replace(/</g,'&lt;')
-              .replace(/>/g,'&gt;')
-              .replace(/"/g,'&quot;')
-              .replace(/'/g,'&#39;');
-        }
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="site-header">
+        <div class="wrap wrap--narrow">
+            <h1 class="site-title">Family Film Journal</h1>
+            <p class="tagline">Cinema that sparks family conversations</p>
+            <p class="subtitle">Curated recommendations for parents of children aged 6–12.</p>
+            <nav class="site-nav">
+                <a href="/films/">Films</a>
+                <a href="/collections/">Collections</a>
+                <a href="/about/">About</a>
+            </nav>
+        </div>
+    </header>
 
-        
-        
-function escapeAttr(str){
-            // attribute-safe encoding (quotes, ampersands, angle brackets)
-            return String(str)
-              .replace(/&/g,'&amp;')
-              .replace(/</g,'&lt;')
-              .replace(/>/g,'&gt;')
-              .replace(/"/g,'&quot;')
-              .replace(/'/g,'&#39;');
-        }
+    <main class="site-main" id="main-content">
+        <div class="wrap wrap--wide">
+            <section class="shelf"><div class="shelf__head"><h2>New on the Journal</h2></div><div class="shelf__rail"><ul class="shelf__list" id="rail-new"></ul></div></section>
+            <section class="shelf"><div class="shelf__head"><h2>Animation Classics</h2></div><div class="shelf__rail"><ul class="shelf__list" id="rail-animation"></ul></div></section>
+            <section class="shelf"><div class="shelf__head"><h2>Animals as Animals</h2></div><div class="shelf__rail"><ul class="shelf__list" id="rail-animals"></ul></div></section>
+            <section class="shelf"><div class="shelf__head"><h2>Robots with Heart</h2></div><div class="shelf__rail"><ul class="shelf__list" id="rail-robots"></ul></div></section>
+            <section class="shelf"><div class="shelf__head"><h2>Grown-up classics</h2></div><div class="shelf__rail"><ul class="shelf__list" id="rail-adult"></ul></div></section>
+        </div>
+    </main>
 
-        // Simple data-first template: add films once, then reuse across shelves.
-        // Posters: save images in /assets/posters/ and reference them like "/assets/posters/<slug>.webp"
-        // Tip: for Prime-like hover cards, landscape posters (16:9) look best.
+    <script>
         const films = {
-            "zootropolis": {
-                        "title": "Zootropolis",
-                        "year": 2016,
-                        "runtime": "1h 48m",
-                        "bbfc": "PG",
-                        "bbfcReason": "mild threat",
-                        "imdb": "8.0/10",
-                        "award": "Oscar® winner — Best Animated Feature",
-                        "synopsis": "In a world of anthropomorphic animals, Judy the rabbit becomes the first rabbit police officer in the city of Zootropolis, where prejudices against 'predator' animals are in danger of resurfacing.",
-                        "themes": "Big dreams & perseverance • doing the right thing (public service) • learning from mistakes • stereotypes & prejudice • fear-mongering & misinformation",
-                        "ourTake": "Funny and sharp; great for most 6+ with a parent",
-                        "poster": "/assets/posters/zootropolis.webp",
-                        "whereLine": ""
-            },
-            "flow": {
-                        "title": "Flow",
-                        "year": 2024,
-                        "runtime": "1h 25m",
-                        "bbfc": "U",
-                        "bbfcReason": "",
-                        "imdb": "8.4/10",
-                        "award": "Oscar® winner — Best Animated Feature",
-                        "synopsis": "Flow tells the story of a lone cat who must learn to collaborate with a mismatched group of other species to survive a catastrophic flood.",
-                        "themes": "Cooperation • impermanence & connection • future of the planet",
-                        "ourTake": "A dialogue-free animal odyssey that turns panic into cooperation—quietly devastating",
-                        "poster": "/assets/posters/flow.webp",
-                        "whereLine": ""
-            },
-            "the-iron-giant": {
-                        "title": "The Iron Giant",
-                        "year": 1999,
-                        "runtime": "1h 26m",
-                        "bbfc": "U",
-                        "bbfcReason": "",
-                        "imdb": "8.1/10",
-                        "award": "BAFTA — Children’s",
-                        "synopsis": "A young boy finds a huge metal robot in the woods near his home and rescues the creature from electrocution. The pair form an unlikely friendship, which is put to the test when a suspicious FBI agent learns of the giant's existence.",
-                        "themes": "Friendship & trust • choosing who you become • Cold War fear of the “other” • anti-war / weapon vs personhood • courage & self-sacrifice",
-                        "ourTake": "A moving parable about a weapon that refuses to be one. Simple, human, and deeply felt.",
-                        "poster": "/assets/posters/the-iron-giant.webp",
-                        "whereLine": ""
-            },
-            "spirited-away": {
-                        "title": "Spirited Away",
-                        "year": 2001,
-                        "runtime": "2h 4m",
-                        "bbfc": "PG",
-                        "bbfcReason": "mild threat and scary scenes, plus brief injury detail (blood on an injured dragon)",
-                        "imdb": "9.0/10",
-                        "award": "Oscar® winner — Best Animated Feature",
-                        "synopsis": "A 10-year-old girl slips into a spirit bathhouse where her parents are turned into pigs—and must find the courage to work, survive, and bring them home.",
-                        "themes": "Growing up & resilience • identity (keeping your name/self) • greed & consumerism • courage under pressure • compassion in a morally grey world • spirits/nature & respect for what we can’t “own”",
-                        "ourTake": "A gorgeous, unsettling coming-of-age dream—brilliant for talking about greed, identity, and growing up.",
-                        "poster": "/assets/posters/spirited-away.webp",
-                        "whereLine": ""
-            },
-            "my-neighbor-totoro": {
-                        "title": "My Neighbor Totoro",
-                        "year": 1998,
-                        "runtime": "1h 26m",
-                        "bbfc": "U",
-                        "bbfcReason": "very mild threat / upsetting scenes, a briefly missing child",
-                        "imdb": "8.1/10",
-                        "award": "Oscar® winner — Best Animated Feature",
-                        "synopsis": "Two sisters move to the countryside while their mother is unwell — and discover the nearby woods are alive with shy, gentle spirits. A small family story that turns worry into wonder, with a few tense moments that resolve warmly.",
-                        "themes": "Growing up & resilience • sisterhood • moving home • nature as comfort • imagination & wonder • family illness (handled gently) • kindness to the unknown",
-                        "ourTake": "A soft, restorative film that takes children’s worries seriously — then answers them with wonder.",
-                        "poster": "/assets/posters/my-neighbor-totoro.webp",
-                        "whereLine": ""
-            },
-            "la-la-land": {
-                        "title": "La La Land",
-                        "year": 2016,
-                        "runtime": "2h 8m",
-                        "bbfc": "12A",
-                        "bbfcReason": "",
-                        "imdb": "8.0/10",
-                        "award": "BAFTA — Best Film • Oscar® — Best Directing",
-                        "synopsis": "In Los Angeles, a jazz pianist and an aspiring actress fall in love while chasing careers that don’t always fit neatly together. A romantic, music-led story that’s mostly light — with one moment of strong language that pushes the rating up.",
-                        "themes": "Dreams vs relationships • ambition & compromise • creativity & craft • “what if?” paths • persistence after setbacks • love that isn’t simple • the price of success",
-                        "ourTake": "A joyful musical with a bittersweet honesty: sometimes growing up means choosing — and letting something go.",
-                        "poster": "/assets/posters/la-la-land.webp",
-                        "whereLine": ""
-            },
-            "its-a-wonderful-life": {
-                        "title": "It’s a Wonderful Life",
-                        "year": 1946,
-                        "runtime": "2h 10m",
-                        "bbfc": "U",
-                        "bbfcReason": "suicide theme is central but treated sensitively with a reassuring outcome",
-                        "imdb": "8.6/10",
-                        "award": "Oscar® — Best Picture",
-                        "synopsis": "On a desperate night, a man who feels he’s failed is shown how many lives he’s changed — and what the world would look like without him. It starts dark, but lands warm, funny, and deeply life-affirming.",
-                        "themes": "Self-worth & belonging • kindness and community • money vs values • mental health (handled with hope) • gratitude • family responsibility • the ripple effect of small choices",
-                        "ourTake": "Surprisingly tough at the start — but one of the best films for talking about kindness, money, and what “success” really means.",
-                        "poster": "/assets/posters/its-a-wonderful-life.webp",
-                        "whereLine": ""
-            },
-            "wall-e": {
-                        "title": "WALL·E",
-                        "year": 2008,
-                        "runtime": "1h 38m",
-                        "bbfc": "U",
-                        "bbfcReason": "very mild threat/violence",
-                        "imdb": "8.4/10",
-                        "award": "BAFTA — Best Animated Film",
-                        "synopsis": "Alone on an abandoned Earth, a small waste-collecting robot keeps going — until a sleek new robot arrives and changes his world. A near-silent love story that grows into a funny, hopeful sci-fi adventure about what humans leave behind.",
-                        "themes": "Love & connection • loneliness • protecting nature • consumerism and waste • humans + technology • bravery without words • rebuilding a future",
-                        "ourTake": "One of the best “first sci-fi” films for kids: simple to follow, rich to talk about afterwards.",
-                        "poster": "/assets/posters/wall-e.webp",
-                        "whereLine": ""
-            }
+            "zootropolis": { "title": "Zootropolis", "year": 2016, "runtime": "1h 48m", "bbfc": "PG", "imdb": "8.0", "award": "Oscar® winner", "synopsis": "In a city of animals, a rabbit cop and a con-artist fox uncover a conspiracy.", "themes": "Prejudice • Perseverance • Stereotypes", "ourTake": "Sharp and funny for all ages.", "poster": "/assets/posters/zootropolis.webp" },
+            "flow": { "title": "Flow", "year": 2024, "runtime": "1h 25m", "bbfc": "U", "imdb": "8.4", "synopsis": "A lone cat survives a great flood by teaming up with other animals.", "themes": "Survival • Cooperation • Nature", "ourTake": "A stunning dialogue-free journey.", "poster": "/assets/posters/flow.webp" },
+            "the-iron-giant": { "title": "The Iron Giant", "year": 1999, "runtime": "1h 26m", "bbfc": "U", "imdb": "8.1", "synopsis": "A boy befriends a giant robot from space that the military wants to destroy.", "themes": "Friendship • Choice • Anti-war", "ourTake": "A masterpiece of emotional storytelling.", "poster": "/assets/posters/the-iron-giant.webp" },
+            "spirited-away": { "title": "Spirited Away", "year": 2001, "runtime": "2h 4m", "bbfc": "PG", "imdb": "9.0", "award": "Oscar® winner", "synopsis": "A girl enters a magical realm to save her parents from a witch.", "themes": "Resilience • Identity • Greed", "ourTake": "A breathtakingly original fantasy.", "poster": "/assets/posters/spirited-away.webp" },
+            "wall-e": { "title": "WALL·E", "year": 2008, "runtime": "1h 38m", "bbfc": "U", "imdb": "8.4", "synopsis": "A small robot on a deserted Earth embarks on a space journey that decides the fate of mankind.", "themes": "Environment • Love • Technology", "ourTake": "Visual storytelling at its absolute best.", "poster": "/assets/posters/wall-e.webp" }
         };
 
-        // Shelves: you can repeat films across shelves (BFI/MUBI style).
         const shelves = {
-            "rail-new": [
-                        "flow",
-                        "zootropolis",
-                        "spirited-away"
-            ],
-            "rail-animation": [
-                        "zootropolis",
-                        "spirited-away",
-                        "my-neighbor-totoro"
-            ],
-            "rail-animals": [
-                        "flow"
-            ],
-            "rail-robots": [
-                        "wall-e",
-                        "the-iron-giant"
-            ],
-            "rail-adult": [
-                        "la-la-land",
-                        "its-a-wonderful-life"
-            ]
+            "rail-new": ["flow", "zootropolis", "spirited-away"],
+            "rail-animation": ["zootropolis", "spirited-away"],
+            "rail-animals": ["flow"],
+            "rail-robots": ["wall-e", "the-iron-giant"],
+            "rail-adult": ["spirited-away"]
         };
 
         function cardHTML(id) {
             const f = films[id];
-
-            const peekTitle = `<div class="peek__title">${escapeHtml(f.title)}</div>`;
-const awardLine = f.award ? `<div class="peek__award">${escapeHtml(f.award)}</div>` : "";
-const synopsis = f.synopsis ? `<div class="peek__synopsis expandable clamp-3" data-label="Synopsis" data-full="${escapeAttr(f.synopsis)}" tabindex="0">${escapeHtml(f.synopsis)}</div>` : "";
-const themes = f.themes ? `<div class="peek__themes expandable" data-label="Themes" data-full="${escapeAttr(f.themes)}" tabindex="0"><span class="peek__label">Themes:</span> ${escapeHtml(f.themes)}</div>` : "";
-const take = f.ourTake ? `<div class="peek__take expandable clamp-2" data-label="Our take" data-full="${escapeAttr(f.ourTake)}" tabindex="0"><span class="peek__label">Our take:</span> ${escapeHtml(f.ourTake)}</div>` : "";
-
-const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
-const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
-const runtime = f.runtime ? `<span class="peek__pill">${escapeHtml(f.runtime)}</span>` : "";
-const bbfc = f.bbfc ? (() => {
-    const badge = (f.bbfcReason && String(f.bbfcReason).trim())
-        ? `<span class="bbfc-badge bbfc-${escapeHtml(f.bbfc).toLowerCase()}" data-tooltip="${escapeHtml(f.bbfcReason)}" aria-label="BBFC ${escapeHtml(f.bbfc)}: ${escapeHtml(f.bbfcReason)}" tabindex="0">${escapeHtml(f.bbfc)}</span>`
-        : `<span class="bbfc-badge bbfc-${escapeHtml(f.bbfc).toLowerCase()}" aria-label="BBFC ${escapeHtml(f.bbfc)}">${escapeHtml(f.bbfc)}</span>`;
-    return `<span class="peek__pill">${badge}</span>`;
-})() : "";
-
-const metaRow = (imdb || year || runtime || bbfc)
-    ? `<div class="peek__meta">${imdb}${year}${runtime}${bbfc}</div>`
-    : "";
-
-const where = f.whereLine ? `<div class="peek__where">${escapeHtml(f.whereLine)}</div>` : "";
-
-const posterImg = f.poster
-                ? `<img src="${escapeHtml(f.poster)}" alt="${escapeHtml(f.title)} poster" loading="lazy" decoding="async" onerror="this.style.opacity=0;this.style.pointerEvents='none';">`
-                : "";
-
-            const themeAttr = f.theme ? ` data-theme="${escapeHtml(f.theme)}"` : "";
-
             return `
-              <li class="card"${themeAttr}>
-                <a class="card__link" href="/films/${id}/" aria-label="${escapeHtml(f.title)} (${escapeHtml(String(f.year || ""))})">
-                  <div class="poster">
-                    ${posterImg}
-                    <div class="peek" role="note" aria-hidden="true">
-                      ${peekTitle}
-                      ${awardLine}
-                      ${synopsis}
-                      ${themes}
-                      ${take}
-                      ${metaRow}
-                      ${where}
-                    </div>
-                  </div>
-                  <div class="meta">
-                    <div class="title">${escapeHtml(f.title)}</div>
-                    ${f.year ? `<div class="year">${escapeHtml(String(f.year))}</div>` : ``}
-                  </div>
-                </a>
-              </li>
-            `;
+                <li class="card">
+                    <a class="card__link" href="/films/${id}/">
+                        <div class="poster">
+                            <img src="${f.poster}" alt="${f.title}">
+                            <div class="peek">
+                                <div class="peek__title">${f.title}</div>
+                                ${f.award ? `<div class="peek__award">${f.award}</div>` : ''}
+                                <div class="peek__synopsis expandable" data-label="Synopsis" data-full="${f.synopsis}">${f.synopsis}</div>
+                                <div class="peek__themes expandable" data-label="Themes" data-full="${f.themes}"><span class="peek__label">Themes:</span> ${f.themes}</div>
+                                <div class="peek__take expandable" data-label="Our take" data-full="${f.ourTake}"><span class="peek__label">Our take:</span> ${f.ourTake}</div>
+                                <div class="peek__meta">
+                                    <span class="peek__pill">IMDb ${f.imdb}</span>
+                                    <span class="peek__pill">${f.year}</span>
+                                    <span class="peek__pill"><span class="bbfc-badge bbfc-${f.bbfc.toLowerCase()}">${f.bbfc}</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="meta"><div class="title">${f.title}</div><div class="year">${f.year}</div></div>
+                    </a>
+                </li>`;
         }
 
-        for (const railId in shelves) {
-            const el = document.getElementById(railId);
-            if (!el) continue;
-            el.innerHTML = shelves[railId].map(cardHTML).join("");
-        }
-
-        // Small accessibility enhancement: press Esc to dismiss an open "peek" (blur focused card).
-        document.addEventListener("keydown", (e) => {
-            if (e.key !== "Escape") return;
-            const active = document.activeElement;
-            if (active && active.classList && (active.classList.contains("card__link") || active.classList.contains("bbfc-badge"))) {
-                active.blur();
-            }
+        Object.keys(shelves).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = shelves[id].map(cardHTML).join("");
         });
-// Shelf navigation: show arrows only when a shelf has more than 4 films AND actually overflows
-        // Also allow mouse wheel to scroll the shelf horizontally (without trapping page scroll when not moving).
-        function canScroll(rail) {
-            return (rail.scrollWidth - rail.clientWidth) > 1;
-        }
 
-        function updateArrowState(shelf, rail) {
-            const leftBtn = shelf.querySelector('.shelf__arrow--left');
-            const rightBtn = shelf.querySelector('.shelf__arrow--right');
-            const list = shelf.querySelector('.shelf__list');
-            const count = list ? list.children.length : 0;
+        // Tooltip logic
+        const tooltip = document.getElementById('ffj-tooltip');
+        function isTruncated(el) { return el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth; }
+        function refreshTruncation() { document.querySelectorAll('.expandable').forEach(el => el.classList.toggle('is-truncated', isTruncated(el))); }
+        
+        document.addEventListener('pointerover', (e) => {
+            const target = e.target.closest('.expandable.is-truncated');
+            if (!target) return;
+            tooltip.innerHTML = `<div class="ffj-tooltip__label">${target.dataset.label}</div>${target.dataset.full}`;
+            tooltip.hidden = false;
+            const rect = target.getBoundingClientRect();
+            tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+            tooltip.style.left = rect.left + 'px';
+        });
 
-            const maxScroll = rail.scrollWidth - rail.clientWidth;
-            const atStart = rail.scrollLeft <= 2;
-            const atEnd = rail.scrollLeft >= maxScroll - 2;
-
-            // Edge peek fades: only if shelf is meant to scroll (more than 4 items) and actually overflows
-            const shouldShowOverflowHints = (count > 4) && (maxScroll > 1);
-            shelf.classList.toggle('has-overflow', shouldShowOverflowHints);
-            shelf.classList.toggle('at-start', atStart);
-            shelf.classList.toggle('at-end', atEnd);
-
-            if (!leftBtn || !rightBtn) return;
-            leftBtn.disabled = atStart;
-            rightBtn.disabled = atEnd;
-        }
-
-        function setupShelfNav(shelf) {
-            const rail = shelf.querySelector('.shelf__rail');
-            const list = shelf.querySelector('.shelf__list');
-            const leftBtn = shelf.querySelector('.shelf__arrow--left');
-            const rightBtn = shelf.querySelector('.shelf__arrow--right');
-            if (!rail || !list || !leftBtn || !rightBtn) return;
-
-            function refresh() {
-                const count = list.children.length;
-                const show = count > 4 && canScroll(rail);
-                shelf.classList.toggle('show-arrows', show);
-                updateArrowState(shelf, rail);
-            }
-
-            const step = () => Math.round(rail.clientWidth * 0.85);
-
-            leftBtn.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
-            rightBtn.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
-
-            rail.addEventListener('scroll', () => updateArrowState(shelf, rail), { passive: true });
-
-rail.addEventListener('wheel', (e) => {
-                const count = list.children.length;
-                if (count <= 4) return;
-
-                const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-                if (!delta) return;
-
-                const before = rail.scrollLeft;
-                rail.scrollLeft += delta;
-
-                const moved = Math.abs(rail.scrollLeft - before) > 0;
-                if (moved) e.preventDefault();
-            }, { passive: false });
-
-            window.addEventListener('resize', refresh, { passive: true });
-            requestAnimationFrame(refresh);
-        }
-
-        document.querySelectorAll('.shelf').forEach(setupShelfNav);
-
-// Keep hover-expanded cards fully within the viewport (prevents left/right clipping)
-        function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
-
-        function applyHoverShift(card, scale) {
-            const margin = 16; // px from viewport edge
-            const rect = card.getBoundingClientRect();
-            const expandedW = rect.width * scale;
-            const expandedH = rect.height * scale;
-
-            // Compute where the expanded card would sit if centered on its current position
-            const centerX = rect.left + rect.width / 2;
-            const expandedLeft = centerX - expandedW / 2;
-            const expandedRight = centerX + expandedW / 2;
-
-            let shiftX = 0;
-            if (expandedLeft < margin) shiftX = margin - expandedLeft;
-            if (expandedRight > (window.innerWidth - margin)) shiftX = (window.innerWidth - margin) - expandedRight;
-
-            // Set CSS variable (used by transform)
-            card.style.setProperty('--hover-shift-x', `${shiftX}px`);
-        }
-
-        function clearHoverShift(card) {
-            card.style.setProperty('--hover-shift-x', '0px');
-        }
-
-        function setupHoverClamping() {
-            const scale = 1.16; // must match CSS hover scale
-            document.querySelectorAll('.card').forEach((card) => {
-                card.addEventListener('mouseenter', () => applyHoverShift(card, scale));
-                card.addEventListener('mouseleave', () => clearHoverShift(card));
-                card.addEventListener('focusin', () => applyHoverShift(card, scale));
-                card.addEventListener('focusout', () => clearHoverShift(card));
-            });
-        }
-
-        setupHoverClamping();
-
-
-
-// --- Truncation detection & tooltip (hover/focus/click, incl. mobile tap) ---
-const tooltip = document.getElementById('ffj-tooltip');
-let tooltipOpenFor = null;
-let hideTimer = null;
-
-function isTruncated(el){
-  // For line-clamped blocks, scrollHeight remains the full height.
-  return (el.scrollHeight - el.clientHeight) > 1 || (el.scrollWidth - el.clientWidth) > 1;
-}
-
-function refreshTruncation(){
-  document.querySelectorAll('.expandable').forEach(el=>{
-    const truncated = isTruncated(el);
-    el.classList.toggle('is-truncated', truncated);
-    // keyboard hint
-    if (truncated) {
-      el.setAttribute('aria-haspopup', 'true');
-    } else {
-      el.removeAttribute('aria-haspopup');
-    }
-  });
-}
-
-function positionTooltip(target){
-  const pad = 12;
-  const rect = target.getBoundingClientRect();
-  // temp position for measurement
-  tooltip.style.left = pad + "px";
-  tooltip.style.top = pad + "px";
-  const tipW = tooltip.offsetWidth;
-  const tipH = tooltip.offsetHeight;
-
-  // prefer below, fallback above
-  let top = rect.bottom + 10;
-  if (top + tipH + pad > window.innerHeight) {
-    top = rect.top - tipH - 10;
-  }
-  top = Math.max(pad, Math.min(top, window.innerHeight - tipH - pad));
-
-  let left = rect.left;
-  // align with target, but keep inside viewport
-  left = Math.max(pad, Math.min(left, window.innerWidth - tipW - pad));
-
-  tooltip.style.left = left + "px";
-  tooltip.style.top = top + "px";
-}
-
-function showTooltipFor(target){
-  if (!target || !target.classList.contains('is-truncated')) return;
-
-  const label = target.dataset.label || "";
-  const full = target.dataset.full || target.textContent || "";
-  tooltip.innerHTML = `
-    ${label ? `<div class="ffj-tooltip__label">${escapeHtml(label)}</div>` : ``}
-    <div class="ffj-tooltip__text">${escapeHtml(full)}</div>
-  `;
-  tooltip.hidden = false;
-  tooltip.setAttribute('aria-hidden','false');
-  tooltipOpenFor = target;
-
-  positionTooltip(target);
-
-  // link trigger for screen readers
-  target.setAttribute('aria-describedby', 'ffj-tooltip');
-}
-
-function hideTooltip(){
-  if (tooltipOpenFor) tooltipOpenFor.removeAttribute('aria-describedby');
-  tooltipOpenFor = null;
-  tooltip.hidden = true;
-  tooltip.setAttribute('aria-hidden','true');
-}
-
-function scheduleHide(){
-  clearTimeout(hideTimer);
-  hideTimer = setTimeout(()=>{
-    // keep open if mouse is over tooltip itself
-    if (tooltip.matches(':hover')) return;
-    hideTooltip();
-  }, 140);
-}
-
-tooltip.addEventListener('mouseenter', ()=> clearTimeout(hideTimer));
-tooltip.addEventListener('mouseleave', scheduleHide);
-
-document.addEventListener('pointerover', (e)=>{
-  const target = e.target.closest('.expandable.is-truncated');
-  if (!target) return;
-  // don't spam if already open for this element
-  if (tooltipOpenFor === target) return;
-  clearTimeout(hideTimer);
-  showTooltipFor(target);
-});
-
-document.addEventListener('pointerout', (e)=>{
-  const leftExpandable = e.target.closest('.expandable.is-truncated');
-  if (!leftExpandable) return;
-  // if moving into tooltip, keep it
-  const toEl = e.relatedTarget;
-  if (toEl && (toEl.closest && toEl.closest('#ffj-tooltip'))) return;
-  scheduleHide();
-});
-
-document.addEventListener('focusin', (e)=>{
-  const target = e.target.closest('.expandable.is-truncated');
-  if (!target) return;
-  clearTimeout(hideTimer);
-  showTooltipFor(target);
-});
-
-document.addEventListener('focusout', (e)=>{
-  const target = e.target.closest('.expandable.is-truncated');
-  if (!target) return;
-  scheduleHide();
-});
-
-// Click/tap toggles tooltip and prevents navigating the card link when tapping text
-document.addEventListener('click', (e)=>{
-  const target = e.target.closest('.expandable.is-truncated');
-  if (!target) return;
-  e.preventDefault();
-  e.stopPropagation();
-  if (tooltipOpenFor === target && !tooltip.hidden) {
-    hideTooltip();
-  } else {
-    clearTimeout(hideTimer);
-    showTooltipFor(target);
-  }
-});
-
-// Dismiss tooltip when clicking elsewhere
-document.addEventListener('click', (e)=>{
-  if (tooltip.hidden) return;
-  if (e.target.closest('#ffj-tooltip')) return;
-  if (e.target.closest('.expandable.is-truncated')) return;
-  hideTooltip();
-}, { capture: true });
-
-document.addEventListener('keydown', (e)=>{
-  if (e.key === 'Escape') {
-    hideTooltip();
-    document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
-  }
-});
-
-// Mobile: first tap opens peek; second tap follows link
-document.addEventListener('click', (e)=>{
-  const link = e.target.closest('.card > a');
-  if (!link) return;
-
-  if (!window.matchMedia('(pointer: coarse)').matches) return;
-  if (e.target.closest('.expandable')) return; // handled above
-
-  const card = link.closest('.card');
-  if (!card) return;
-
-  if (!card.classList.contains('is-active')) {
-    e.preventDefault();
-    document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
-    card.classList.add('is-active');
-    // refresh truncation once peek becomes visible
-    requestAnimationFrame(refreshTruncation);
-  }
-});
-
-// Tap outside to close active peek on mobile
-document.addEventListener('click', (e)=>{
-  if (!window.matchMedia('(pointer: coarse)').matches) return;
-  if (e.target.closest('.card.is-active')) return;
-  document.querySelectorAll('.card.is-active').forEach(c=>c.classList.remove('is-active'));
-}, { capture: true });
-
-// Keep truncation state correct when layout changes
-window.addEventListener('resize', ()=> {
-  hideTooltip();
-  refreshTruncation();
-});
-
-// Initial pass (after shelves render)
-setTimeout(refreshTruncation, 50);
-
-</script>
-
-  <div id="ffj-tooltip" class="ffj-tooltip" role="tooltip" hidden aria-hidden="true"></div>
+        document.addEventListener('pointerout', (e) => { if (e.target.closest('.expandable')) tooltip.hidden = true; });
+        window.addEventListener('resize', refreshTruncation);
+        setTimeout(refreshTruncation, 100);
+    </script>
+    <div id="ffj-tooltip" class="ffj-tooltip" hidden></div>
 </body>
 </html>
