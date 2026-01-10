@@ -356,14 +356,14 @@
         }
 
         /* Shelves (BFI/MUBI-style rows) */
-        .shelf { margin: 0 0 calc(var(--spacing-unit) * 2); }
+        .shelf { margin: 0 0 calc(var(--spacing-unit) * 1); }
 
         .shelf__head {
             display: flex;
             align-items: baseline;
             justify-content: space-between;
             gap: 1rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.45rem;
         }
 
         .shelf__head h2 {
@@ -397,7 +397,7 @@
     overflow-x: auto;
     overflow-y: visible; /* avoid nested vertical scrollbars */
     scroll-snap-type: x mandatory;
-    padding: 0.5rem 0 6.5rem;
+    padding: 0.5rem 0 3.25rem;
     -webkit-overflow-scrolling: touch;
 
             scrollbar-width: none; /* Firefox */
@@ -537,7 +537,8 @@
             font-size: 1.02rem;
             font-weight: 800;
             letter-spacing: 0.01em;
-            margin-bottom: 0.6rem;
+                        margin-top: 0.12rem;
+margin-bottom: 0.3rem;
             color: #2dd4bf;
         }
 
@@ -763,7 +764,7 @@ text-overflow: ellipsis;
             text-overflow: ellipsis;
         }
 
-        .peek__label{ color: rgba(255,255,255,0.88); font-weight: 700; }
+        .peek__label{ color: #60a5fa; font-weight: 800; }
 /* Push meta + where to the bottom of the expanded peek */
 .peek__meta{ margin-top: auto; }
 
