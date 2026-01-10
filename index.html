@@ -492,7 +492,7 @@
            Goal: readable metadata like Prime's expanded card.
            - The image stays visible at the top.
            - Info starts ~2/5 down the image and can extend below the image. */
-        :root { --peek-extra: 0px; } /* extra space below the image for text */
+        :root { --peek-extra: 170px; } /* extra space below the image for text */
 
         .peek {
             overflow: hidden;
@@ -500,7 +500,7 @@
             left: 0;
             right: 0;
             top: 42%;
-            bottom: 0;
+            bottom: calc(-1 * var(--peek-extra));
             border-radius: 0 0 18px 18px;
             padding: 0.8rem 0.9rem 0.85rem;
             background: linear-gradient(
@@ -782,79 +782,74 @@ text-overflow: ellipsis;
     }
 }
 
-.peek{ {
-  top: 38%;
-  bottom: 0;
-  padding: 0.45rem 0.7rem 0.55rem;
-  overflow: hidden;
-  max-height: 100%;
-  pointer-events: none;
+/* --- FFJ override: compact Prime-style overlay that always fits (no internal scroll) --- */
+.film-card .peek{
+  top: 40% !important;
+  bottom: 0 !important;
+  padding: 10px 14px 12px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  pointer-events: none !important; /* never hijack mouse/scroll */
+}
+.film-card .peek__title{
+  margin: 0 !important;
+  font-size: 16px !important;
+  line-height: 1.15 !important;
+}
+.film-card .peek__award{
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.15 !important;
+  color: #60a5fa !important; /* blue */
+}
+.film-card .peek__synopsis{
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+.film-card .peek__themes{
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+.film-card .peek__take{
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+.film-card .peek__meta{
+  margin-top: auto !important; /* pins pills to bottom */
+  padding-top: 6px !important;
+  gap: 8px !important;
+}
+.film-card .pill{
+  font-size: 13px !important;
+  padding: 6px 10px !important;
+}
+.film-card .peek__label{
+  color: #60a5fa !important; /* Themes / Our take labels blue */
 }
 
-.peek__title{ {
-  margin: 0 0 0.12rem;
-  font-size: 1.0rem;
-  line-height: 1.15;
-}
+/* tighten shelf vertical spacing */
+.shelf{ margin: 0 auto 22px !important; }
+.shelf__head{ margin-bottom: 8px !important; }
+.shelf__rail{ padding: 8px 0 18px !important; }
+/* --- end override --- */
 
-.peek__award{ {
-  margin: 0 0 0.18rem;
-  font-size: 0.88rem;
-  color: #60a5fa;
-  line-height: 1.15;
-}
-
-.peek__synopsis{ {
-  margin: 0 0 0.16rem;
-  font-size: 0.84rem;
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.peek__themes{ {
-  margin: 0 0 0.12rem;
-  font-size: 0.82rem;
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.peek__take{ {
-  margin: 0 0 0.14rem;
-  font-size: 0.82rem;
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.peek__meta{ {
-  margin-top: 0.22rem;
-  gap: 0.4rem;
-}
-
-.pill{ {
-  font-size: 0.82rem;
-  padding: 0.35rem 0.6rem;
-}
-
-.shelf{ {
-  margin: 0 auto 0.85rem;
-}
-
-.shelf__rail{ {
-  padding: 0.4rem 0 1.05rem;
-}
-
-.shelf__head{ {
-  margin-bottom: 0.35rem;
-}
 </style>
 </head>
 <body>
@@ -1207,27 +1202,21 @@ const posterImg = f.poster
             rail.addEventListener('scroll', () => updateArrowState(shelf, rail), { passive: true });
 
             rail.addEventListener('wheel', (e) => {
-                const count = list.children.length;
-                if (count <= 4) return;
+  // Let the page scroll vertically by default.
+  // Only use the wheel for horizontal shelf scrolling when:
+  // - user holds Shift, or
+  // - the input device is producing a stronger horizontal delta than vertical (trackpads).
+  const useHorizontal = e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY);
+  if (!useHorizontal) return;
 
-                // Do NOT trap normal page scroll.
-                // Only scroll the rail horizontally when:
-                //  - user holds Shift, OR
-                //  - trackpad gesture is primarily horizontal.
-                const horizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-                const shiftScroll = e.shiftKey;
+  const rail = e.target.closest?.('.shelf__rail');
+  if (!rail) return;
 
-                if (!(shiftScroll || horizontalIntent)) return;
-
-                const delta = shiftScroll ? e.deltaY : e.deltaX;
-                if (!delta) return;
-
-                const before = rail.scrollLeft;
-                rail.scrollLeft += delta;
-
-                const moved = Math.abs(rail.scrollLeft - before) > 0;
-                if (moved) e.preventDefault();
-            }, { passive: false });
+  // Horizontal scroll within the shelf.
+  e.preventDefault();
+  const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY; // Shift+wheel typically comes as deltaY
+  rail.scrollLeft += delta;
+}, { passive: false });
 
             window.addEventListener('resize', refresh, { passive: true });
             requestAnimationFrame(refresh);
