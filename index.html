@@ -397,7 +397,7 @@
     overflow-x: auto;
     overflow-y: visible; /* avoid nested vertical scrollbars */
     scroll-snap-type: x mandatory;
-    padding: 0.5rem 0 6.5rem;
+    padding: 0.5rem 0 2.4rem;
     -webkit-overflow-scrolling: touch;
 
             scrollbar-width: none; /* Firefox */
@@ -596,6 +596,8 @@
             --hover-shift-y: -10px;
             z-index: 50;
         }
+        .card.is-open .peek{ opacity: 1; transform: translateY(0); pointer-events: auto; }
+
             transition: transform 180ms ease;
             transform-origin: center;
             z-index: 1;
@@ -824,6 +826,64 @@ text-overflow: ellipsis;
         transform: rotate(45deg);
     }
 }
+
+/* ===== FFJ: Expandable text tooltips (Synopsis / Themes / Our take) ===== */
+.expandable{
+    position: relative;
+    outline: none;
+}
+.expandable.is-truncated{
+    cursor: help;
+}
+/* Visible trailing ellipsis hint even for multi-line clamps */
+.expandable.is-truncated::after{
+    content: "…";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-left: 8px;
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.82) 100%);
+    color: rgba(255,255,255,0.92);
+    font-weight: 800;
+    pointer-events: none;
+}
+
+/* Line clamps */
+.clamp-1{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.clamp-2, .clamp-3{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.clamp-2{ -webkit-line-clamp: 2; }
+.clamp-3{ -webkit-line-clamp: 3; }
+
+/* Tooltip popover */
+#ffj-texttip{
+    position: fixed;
+    z-index: 9999;
+    max-width: min(520px, calc(100vw - 24px));
+    background: rgba(0,0,0,0.88);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+}
+#ffj-texttip strong{
+    color: rgba(255,255,255,0.92);
+    font-weight: 800;
+}
+
 </style>
 </head>
 <body>
@@ -901,6 +961,7 @@ text-overflow: ellipsis;
 </section>
 </div>
 </main>
+<div id="ffj-texttip" role="tooltip" aria-hidden="true"></div>
 <footer role="contentinfo">
 <p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
 <p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
@@ -1063,10 +1124,9 @@ text-overflow: ellipsis;
 
             const peekTitle = `<div class="peek__title">${escapeHtml(f.title)}</div>`;
 const awardLine = f.award ? `<div class="peek__award">${escapeHtml(f.award)}</div>` : "";
-const synopsis = f.synopsis ? `<div class="peek__synopsis">${escapeHtml(f.synopsis)}</div>` : "";
-const themes = f.themes ? `<div class="peek__themes"><span class="peek__label">Themes:</span> ${escapeHtml(f.themes)}</div>` : "";
-const take = f.ourTake ? `<div class="peek__take"><span class="peek__label">Our take:</span> ${escapeHtml(f.ourTake)}</div>` : "";
-
+const synopsis = f.synopsis ? `<div class="peek__synopsis expandable clamp-3" data-full="${escapeHtml(f.synopsis)}">${escapeHtml(f.synopsis)}</div>` : "";
+const themes = f.themes ? `<div class="peek__themes"><span class="peek__label">Themes:</span> <span class="expandable clamp-1" data-full="${escapeHtml(f.themes)}">${escapeHtml(f.themes)}</span></div>` : "";
+const take = f.ourTake ? `<div class="peek__take"><span class="peek__label">Our take:</span> <span class="expandable clamp-2" data-full="${escapeHtml(f.ourTake)}">${escapeHtml(f.ourTake)}</span></div>` : "";
 const imdb = f.imdb ? `<span class="peek__pill">IMDb ${escapeHtml(f.imdb)}</span>` : "";
 const year = f.year ? `<span class="peek__pill">${escapeHtml(String(f.year))}</span>` : "";
 const runtime = f.runtime ? `<span class="peek__pill">${escapeHtml(f.runtime)}</span>` : "";
@@ -1179,7 +1239,16 @@ const posterImg = f.poster
                 const count = list.children.length;
                 if (count <= 4) return;
 
-                const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+                // Do NOT trap normal page scroll.
+                // Only scroll the rail horizontally when:
+                //  - user holds Shift (common UX), OR
+                //  - trackpad gesture is primarily horizontal (deltaX dominates).
+                const horizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+                const shiftScroll = e.shiftKey;
+
+                if (!(shiftScroll || horizontalIntent)) return;
+
+                const delta = shiftScroll ? e.deltaY : e.deltaX;
                 if (!delta) return;
 
                 const before = rail.scrollLeft;
@@ -1231,7 +1300,147 @@ const posterImg = f.poster
             });
         }
 
+        
+        // ===== FFJ: Expandable tooltip behavior (hover/focus + tap) =====
+        const ffjTip = document.getElementById('ffj-texttip');
+        let ffjTipTarget = null;
+        let ffjTipHideTimer = null;
+
+        function ffjIsTruncated(el){
+            // Works for single-line and multi-line clamps.
+            return (el.scrollWidth - el.clientWidth) > 1 || (el.scrollHeight - el.clientHeight) > 1;
+        }
+
+        function ffjShowTip(el, text){
+            if (!ffjTip) return;
+            clearTimeout(ffjTipHideTimer);
+            ffjTipTarget = el;
+            ffjTip.textContent = text;
+            ffjTip.style.display = 'block';
+            ffjTip.setAttribute('aria-hidden','false');
+
+            const r = el.getBoundingClientRect();
+            const pad = 12;
+
+            // Position below by default, flip above if needed.
+            const tw = ffjTip.offsetWidth;
+            const th = ffjTip.offsetHeight;
+
+            let x = Math.min(Math.max(r.left, pad), window.innerWidth - tw - pad);
+            let y = r.bottom + 8;
+            if (y + th > window.innerHeight - pad) y = r.top - th - 8;
+            y = Math.max(pad, y);
+
+            ffjTip.style.left = x + 'px';
+            ffjTip.style.top  = y + 'px';
+        }
+
+        function ffjHideTipSoon(){
+            if (!ffjTip) return;
+            clearTimeout(ffjTipHideTimer);
+            ffjTipHideTimer = setTimeout(() => {
+                ffjTip.style.display = 'none';
+                ffjTip.setAttribute('aria-hidden','true');
+                ffjTipTarget = null;
+            }, 110);
+        }
+
+        function ffjHideTipNow(){
+            if (!ffjTip) return;
+            clearTimeout(ffjTipHideTimer);
+            ffjTip.style.display = 'none';
+            ffjTip.setAttribute('aria-hidden','true');
+            ffjTipTarget = null;
+        }
+
+        // Keep tooltip open if hovered
+        if (ffjTip){
+            ffjTip.addEventListener('mouseenter', () => clearTimeout(ffjTipHideTimer));
+            ffjTip.addEventListener('mouseleave', ffjHideTipSoon);
+        }
+
+        // Close on Escape / scroll / outside click
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') ffjHideTipNow();
+        });
+        window.addEventListener('scroll', () => { if (ffjTip && ffjTip.style.display === 'block') ffjHideTipSoon(); }, { passive:true });
+        document.addEventListener('click', (e) => {
+            if (!ffjTip) return;
+            const insideTip = e.target.closest('#ffj-texttip');
+            const insideExpandable = e.target.closest('.expandable');
+            if (!insideTip && !insideExpandable) ffjHideTipNow();
+        }, { passive:true });
+
+        function ffjBindExpandables(scope){
+            scope.querySelectorAll('.expandable[data-full]').forEach((el) => {
+                // Determine truncation AFTER layout has settled
+                const truncated = ffjIsTruncated(el);
+                el.classList.toggle('is-truncated', truncated);
+
+                // Desktop hover/focus: show only when truncated
+                el.addEventListener('mouseenter', () => {
+                    if (!ffjIsTruncated(el)) return;
+                    ffjShowTip(el, el.getAttribute('data-full') || '');
+                });
+                el.addEventListener('mouseleave', () => {
+                    if (ffjTipTarget === el) ffjHideTipSoon();
+                });
+
+                el.setAttribute('tabindex', '0');
+                el.addEventListener('focus', () => {
+                    if (!ffjIsTruncated(el)) return;
+                    ffjShowTip(el, el.getAttribute('data-full') || '');
+                });
+                el.addEventListener('blur', () => {
+                    if (ffjTipTarget === el) ffjHideTipSoon();
+                });
+
+                // Tap/click: toggle tooltip (mobile-friendly)
+                el.addEventListener('click', (ev) => {
+                    if (!ffjIsTruncated(el)) return; // only when truncated
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    const text = el.getAttribute('data-full') || '';
+                    if (ffjTipTarget === el && ffjTip.style.display === 'block'){
+                        ffjHideTipNow();
+                    } else {
+                        ffjShowTip(el, text);
+                    }
+                }, { passive:false });
+            });
+        }
+
+        // ===== FFJ: Tap-to-open cards (B: first tap opens, second navigates) =====
+        const ffjCoarse = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (ffjCoarse){
+            document.querySelectorAll('.card').forEach((card) => {
+                card.addEventListener('click', (e) => {
+                    // If tapping on an expandable text, let that handler manage it.
+                    if (e.target.closest('.expandable')) return;
+
+                    const alreadyOpen = card.classList.contains('is-open');
+                    if (!alreadyOpen){
+                        e.preventDefault();
+                        // close others
+                        document.querySelectorAll('.card.is-open').forEach(c => c.classList.remove('is-open'));
+                        card.classList.add('is-open');
+                        // bind expandables inside this peek now that it's visible
+                        const peek = card.querySelector('.peek');
+                        if (peek) requestAnimationFrame(() => ffjBindExpandables(peek));
+                    } // else: second tap navigates normally
+                }, { passive:false });
+            });
+
+            // tap outside closes
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.card')) return;
+                document.querySelectorAll('.card.is-open').forEach(c => c.classList.remove('is-open'));
+            }, { passive:true });
+        }
+
         setupHoverClamping();
+        // Bind expandable tooltips after initial render
+        requestAnimationFrame(() => ffjBindExpandables(document));
 
 </script>
 </body>
