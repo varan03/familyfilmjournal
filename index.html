@@ -492,26 +492,33 @@
            Goal: readable metadata like Prime's expanded card.
            - The image stays visible at the top.
            - Info starts ~2/5 down the image and can extend below the image. */
-        :root { --peek-top: 34%; }
+        :root { --peek-extra: 170px; } /* extra space below the image for text */
 
         .peek {
+            overflow: hidden;
             position: absolute;
-            z-index: 58; /* above rail fades */
-            top: var(--peek-top);
             left: 0;
             right: 0;
-            bottom: 0; /* keep overlay inside the poster (no page scrolling needed) */
-            background: rgba(0,0,0,.62);
+            top: 42%;
+            bottom: calc(-1 * var(--peek-extra));
+            border-radius: 0 0 18px 18px;
+            padding: 0.8rem 0.9rem 0.85rem;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.00) 0%,
+                rgba(0, 0, 0, 0.22) 18%,
+                rgba(0, 0, 0, 0.62) 60%,
+                rgba(0, 0, 0, 0.78) 100%
+            );
+            color: #fff;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 180ms ease, transform 180ms ease;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.35);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 220ms ease, transform 250ms ease;
-            pointer-events: none; /* never hijack scroll/click */
         }
 
         /* Optional per-film light theme (rare; use when the poster is already dark) */
@@ -526,11 +533,32 @@
             text-shadow: none;
         }
 
-        .peek__award { font-size: 1rem; color: #4ea8ff; font-weight: 700; margin: 0; }
+        .peek__award {
+            font-size: 1.02rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+                        margin-top: 0.12rem;
+margin-bottom: 0.3rem;
+            color: #2dd4bf;
+        }
 
-        .peek__meta { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; margin-top: auto; }
+        .peek__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem 0.6rem;
+            font-size: 0.98rem;
+            margin-bottom: 0.7rem;
+        }
 
-        .peek__pill { display:inline-flex; align-items:center; justify-content:center; padding: 0 12px; height: 36px; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; font-size: .82rem; color: #fff; background: rgba(0,0,0,.20); }
+        .peek__pill {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.32);
+            border-radius: 999px;
+            padding: 0.16rem 0.6rem;
+            font-size: 0.95rem;
+            background: rgba(0,0,0,0.18);
+        }
 
         .card[data-theme="light"] .peek__pill {
             border-color: rgba(0,0,0,0.20);
@@ -543,7 +571,15 @@
             margin-bottom: 0.7rem;
         }
 
-        .peek__blurb { font-size: .92rem; line-height: 1.25; color: rgba(255,255,255,.92); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+        .peek__blurb {
+            font-size: 1.02rem;
+            line-height: 1.35;
+            opacity: 0.98;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
         .peek,
         .title,
@@ -668,7 +704,7 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 160ms ease;
-            z-index: 40; /* below arrows (60), above posters */
+            z-index: 55; /* below arrows (60), above posters */
         }
 
         .shelf.has-overflow .shelf__rail::before {
@@ -690,7 +726,13 @@
     flex-direction: column;
     gap: 0.45rem;
 }
-.peek__title { font-size: 1.05rem; font-weight: 800; line-height: 1.15; margin: 0; }
+.peek__title{
+    font-weight: 900;
+    font-size: 1.0rem;
+    line-height: 1.15;
+    letter-spacing: 0.2px;
+    margin-bottom: 0.05rem;
+}
 .peek__synopsis{
     font-size: 0.86rem;
     line-height: 1.35;
@@ -700,11 +742,29 @@
     overflow: hidden;
 text-overflow: ellipsis;
         }
-.peek__themes { font-size: .86rem; line-height: 1.25; color: rgba(255,255,255,.92); display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; margin:0; }
+.peek__themes{
+            font-size: 0.86rem;
+            line-height: 1.25;
+            opacity: 0.96;
+            margin-top: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        .peek__take { font-size: .86rem; line-height: 1.25; color: rgba(255,255,255,.92); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0; }
+        .peek__take{
+            font-size: 0.86rem;
+            line-height: 1.25;
+            opacity: 0.96;
+            margin-top: 0.15rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        .peek__label { font-weight: 700; color: #4ea8ff; }
+        .peek__label{ color: #60a5fa; font-weight: 800; }
 /* Push meta + where to the bottom of the expanded peek */
 .peek__meta{ margin-top: auto; }
 
@@ -721,75 +781,6 @@ text-overflow: ellipsis;
         transform: rotate(45deg);
     }
 }
-
-/* --- FFJ override: compact Prime-style overlay that always fits (no internal scroll) --- */
-.film-card .peek{
-  top: 40% !important;
-  bottom: 0 !important;
-  padding: 10px 14px 12px !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-  pointer-events: none !important; /* never hijack mouse/scroll */
-}
-.film-card .peek__title{
-  margin: 0 !important;
-  font-size: 16px !important;
-  line-height: 1.15 !important;
-}
-.film-card .peek__award{
-  margin: 0 !important;
-  font-size: 14px !important;
-  line-height: 1.15 !important;
-  color: #60a5fa !important; /* blue */
-}
-.film-card .peek__synopsis{
-  margin: 0 !important;
-  font-size: 13px !important;
-  line-height: 1.25 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 3 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-.film-card .peek__themes{
-  margin: 0 !important;
-  font-size: 13px !important;
-  line-height: 1.25 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 1 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-.film-card .peek__take{
-  margin: 0 !important;
-  font-size: 13px !important;
-  line-height: 1.25 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-.film-card .peek__meta{
-  margin-top: auto !important; /* pins pills to bottom */
-  padding-top: 6px !important;
-  gap: 8px !important;
-}
-.film-card .pill{
-  font-size: 13px !important;
-  padding: 6px 10px !important;
-}
-.film-card .peek__label{
-  color: #60a5fa !important; /* Themes / Our take labels blue */
-}
-
-/* tighten shelf vertical spacing */
-.shelf{ margin: 0 auto 14px !important; }
-.shelf__head{ margin-bottom: 8px !important; }
-.shelf__rail{ padding: 8px 0 18px !important; }
-/* --- end override --- */
-
 </style>
 </head>
 <body>
@@ -1142,21 +1133,27 @@ const posterImg = f.poster
             rail.addEventListener('scroll', () => updateArrowState(shelf, rail), { passive: true });
 
             rail.addEventListener('wheel', (e) => {
-  // Let the page scroll vertically by default.
-  // Only use the wheel for horizontal shelf scrolling when:
-  // - user holds Shift, or
-  // - the input device is producing a stronger horizontal delta than vertical (trackpads).
-  const useHorizontal = e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY);
-  if (!useHorizontal) return;
+                const count = list.children.length;
+                if (count <= 4) return;
 
-  const rail = e.target.closest?.('.shelf__rail');
-  if (!rail) return;
+                // Do NOT trap normal page scroll.
+                // Only scroll the rail horizontally when:
+                //  - user holds Shift, OR
+                //  - trackpad gesture is primarily horizontal.
+                const horizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+                const shiftScroll = e.shiftKey;
 
-  // Horizontal scroll within the shelf.
-  e.preventDefault();
-  const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY; // Shift+wheel typically comes as deltaY
-  rail.scrollLeft += delta;
-}, { passive: false });
+                if (!(shiftScroll || horizontalIntent)) return;
+
+                const delta = shiftScroll ? e.deltaY : e.deltaX;
+                if (!delta) return;
+
+                const before = rail.scrollLeft;
+                rail.scrollLeft += delta;
+
+                const moved = Math.abs(rail.scrollLeft - before) > 0;
+                if (moved) e.preventDefault();
+            }, { passive: false });
 
             window.addEventListener('resize', refresh, { passive: true });
             requestAnimationFrame(refresh);
@@ -1168,24 +1165,21 @@ const posterImg = f.poster
         function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
         function applyHoverShift(card, scale) {
-            const rail = card.closest('.shelf__rail');
-            const bounds = rail ? rail.getBoundingClientRect() : { left: 0, right: window.innerWidth };
-            const margin = 16;
-
+            const margin = 16; // px from viewport edge
             const rect = card.getBoundingClientRect();
             const expandedW = rect.width * scale;
-            const centerX = rect.left + rect.width / 2;
+            const expandedH = rect.height * scale;
 
+            // Compute where the expanded card would sit if centered on its current position
+            const centerX = rect.left + rect.width / 2;
             const expandedLeft = centerX - expandedW / 2;
             const expandedRight = centerX + expandedW / 2;
 
-            const minLeft = bounds.left + margin;
-            const maxRight = bounds.right - margin;
-
             let shiftX = 0;
-            if (expandedLeft < minLeft) shiftX = (minLeft - expandedLeft);
-            if (expandedRight + shiftX > maxRight) shiftX = (maxRight - expandedRight);
+            if (expandedLeft < margin) shiftX = margin - expandedLeft;
+            if (expandedRight > (window.innerWidth - margin)) shiftX = (window.innerWidth - margin) - expandedRight;
 
+            // Set CSS variable (used by transform)
             card.style.setProperty('--hover-shift-x', `${shiftX}px`);
         }
 
