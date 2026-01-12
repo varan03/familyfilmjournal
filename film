@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Family Film Journal | Film</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --shelf-bg: #1e2225;
+      --color-top: #f6f1fa;
+      --color-bottom: #1f2124;
+      --color-card: #faf8f5;
+
+      --color-ink: #1a1a1a;
+      --color-ink-on-dark: #f3f3f3;
+      --color-muted: #6b6b6b;
+      --color-muted-on-dark: rgba(243, 243, 243, 0.72);
+
+      --color-accent: #8b4513;
+      --color-border: rgba(26, 26, 26, 0.12);
+      --color-border-on-dark: rgba(243, 243, 243, 0.16);
+
+      --font-logo: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      --wrap-wide: 1100px;
+      --spacing: 1.5rem;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      line-height: 1.6;
+      color: var(--color-ink);
+      background: var(--color-top);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+    .wrap { width: 100%; max-width: min(96vw, var(--wrap-wide)); margin: 0 auto; }
+
+    .site-header {
+      background: var(--color-top);
+      padding: calc(var(--spacing) * 2.5) var(--spacing) calc(var(--spacing) * 1.5);
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .site-title {
+      font-family: var(--font-logo);
+      font-size: clamp(2.0rem, 5vw, 3.0rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .tagline {
+      font-family: var(--font-logo);
+      font-size: 1.15rem;
+      font-style: italic;
+      opacity: 0.88;
+      margin-bottom: 1rem;
+    }
+
+    .site-nav {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .site-nav a {
+      text-decoration: none;
+      color: var(--color-muted);
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+    }
+    .site-nav a:hover { color: var(--color-ink); background: rgba(0,0,0,0.04); }
+
+    .site-main {
+      flex: 1;
+      background: var(--color-bottom);
+      color: var(--color-ink-on-dark);
+      padding: calc(var(--spacing) * 2) var(--spacing) calc(var(--spacing) * 3);
+    }
+
+    .film-panel {
+      margin: 0 auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--color-border-on-dark);
+      border-radius: 18px;
+      padding: calc(var(--spacing) * 1.25);
+    }
+
+    .film-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .poster-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    .poster-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .info-card {
+      background: var(--color-card);
+      color: var(--color-ink);
+      border-radius: 16px;
+      border: 1px solid var(--color-border);
+      padding: 18px 18px 16px;
+    }
+
+    .film-title {
+      font-size: 1.8rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .award {
+      font-weight: 800;
+      color: #0f766e;
+      margin-bottom: 0.65rem;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 0.2rem 0 0.9rem;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(26,26,26,0.18);
+      border-radius: 999px;
+      padding: 0.18rem 0.65rem;
+      font-size: 0.95rem;
+      background: rgba(0,0,0,0.04);
+      white-space: nowrap;
+    }
+
+    .section {
+      margin-top: 0.9rem;
+    }
+    .label {
+      font-weight: 800;
+      color: rgba(26,26,26,0.75);
+      margin-bottom: 0.15rem;
+    }
+    .text {
+      color: rgba(26,26,26,0.92);
+    }
+
+    /* Your requested beta message: font-size 18px */
+    .beta-note {
+      margin-top: 1.1rem;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(26,26,26,0.14);
+      background: rgba(139, 69, 19, 0.06);
+      font-size: 18px;
+      line-height: 1.5;
+      color: rgba(26,26,26,0.9);
+    }
+
+    .back {
+      display: inline-flex;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: rgba(243,243,243,0.92);
+      border-bottom: 1px solid rgba(243,243,243,0.45);
+      font-weight: 600;
+    }
+    .back:hover { color: #fff; border-bottom-color: transparent; }
+
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: calc(var(--spacing) * 1.5) var(--spacing);
+      text-align: center;
+      margin-top: auto;
+      background: var(--color-top);
+    }
+    .creator { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 0.5rem; }
+    .creator-name { color: var(--color-ink); font-weight: 500; }
+    .copyright { font-size: 0.8rem; color: var(--color-muted); }
+
+    @media (max-width: 860px){
+      .film-grid { grid-template-columns: 1fr; }
+      .poster-wrap img { aspect-ratio: 16 / 9; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1 class="site-title">Family Film Journal</h1>
+      <p class="tagline">Cinema that sparks family conversations</p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="index.html#main-content">Browse</a>
+        <a href="index.html#about-heading">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" role="main">
+    <div class="wrap">
+      <a class="back" href="index.html">← Back to home</a>
+
+      <section class="film-panel">
+        <div class="film-grid">
+          <div class="poster-wrap" id="posterWrap" style="display:none;">
+            <img id="filmPoster" src="" alt="" />
+          </div>
+
+          <div class="info-card">
+            <div class="film-title" id="filmTitle">Film</div>
+            <div class="award" id="filmAward" style="display:none;"></div>
+
+            <div class="pills" id="filmPills"></div>
+
+            <div class="section" id="synopsisSection" style="display:none;">
+              <div class="label">Synopsis</div>
+              <div class="text" id="filmSynopsis"></div>
+            </div>
+
+            <div class="section" id="themesSection" style="display:none;">
+              <div class="label">Themes</div>
+              <div class="text" id="filmThemes"></div>
+            </div>
+
+            <div class="section" id="takeSection" style="display:none;">
+              <div class="label">Our take</div>
+              <div class="text" id="filmTake"></div>
+            </div>
+
+            <div class="beta-note">
+              We’re currently reorganising our film pages for the beta version, based on user feedback.
+              Thanks for your patience — this page will be back in full soon.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <p class="creator">A project by <span class="creator-name">Volkan Aran</span></p>
+    <p class="copyright">© 2024 Family Film Journal. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+
+    // Copy of your film data (same keys as index.html)
+    const films = {
+      "zootropolis": {
+        "title":"Zootropolis","year":2016,"runtime":"1h 48m","bbfc":"PG","bbfcReason":"mild threat","imdb":"8.0/10",
+        "award":"Oscar® winner — Best Animated Feature",
+        "synopsis":"In a world of anthropomorphic animals, Judy the rabbit becomes the first rabbit police officer in the city of Zootropolis, where prejudices against 'predator' animals are in danger of resurfacing.",
+        "themes":"Big dreams & perseverance • doing the right thing (public service) • learning from mistakes • stereotypes & prejudice • fear-mongering & misinformation",
+        "ourTake":"Funny and sharp; great for most 6+ with a parent",
+        "poster":"/assets/posters/zootropolis.webp","whereLine":""
+      },
+      "flow": {
+        "title":"Flow","year":2024,"runtime":"1h 25m","bbfc":"U","bbfcReason":"","imdb":"8.4/10",
+        "award":"Oscar® winner — Best Animated Feature",
+        "synopsis":"Flow tells the story of a lone cat who must learn to collaborate with a mismatched group of other species to survive a catastrophic flood.",
+        "themes":"Cooperation • impermanence & connection • future of the planet",
+        "ourTake":"A dialogue-free animal odyssey that turns panic into cooperation—quietly devastating",
+        "poster":"/assets/posters/flow.webp","whereLine":""
+      },
+      "the-iron-giant": {
+        "title":"The Iron Giant","year":1999,"runtime":"1h 26m","bbfc":"U","bbfcReason":"","imdb":"8.1/10",
+        "award":"BAFTA — Children’s",
+        "synopsis":"A young boy finds a huge metal robot in the woods near his home and rescues the creature from electrocution. The pair form an unlikely friendship, which is put to the test when a suspicious FBI agent learns of the giant's existence.",
+        "themes":"Friendship & trust • choosing who you become • Cold War fear of the “other” • anti-war / weapon vs personhood • courage & self-sacrifice",
+        "ourTake":"A moving parable about a weapon that refuses to be one. Simple, human, and deeply felt.",
+        "poster":"/assets/posters/the-iron-giant.webp","whereLine":""
+      },
+      "spirited-away": {
+        "title":"Spirited Away","year":2001,"runtime":"2h 4m","bbfc":"PG","bbfcReason":"mild threat and scary scenes, plus brief injury detail (blood on an injured dragon)","imdb":"9.0/10",
+        "award":"Oscar® winner — Best Animated Feature",
+        "synopsis":"A 10-year-old girl slips into a spirit bathhouse where her parents are turned into pigs—and must find the courage to work, survive, and bring them home.",
+        "themes":"Growing up & resilience • identity (keeping your name/self) • greed & consumerism • courage under pressure • compassion in a morally grey world • spirits/nature & respect for what we can’t “own”",
+        "ourTake":"A gorgeous, unsettling coming-of-age dream—brilliant for talking about greed, identity, and growing up.",
+        "poster":"/assets/posters/spirited-away.webp","whereLine":""
+      },
+      "my-neighbor-totoro": {
+        "title":"My Neighbor Totoro","year":1998,"runtime":"1h 26m","bbfc":"U","bbfcReason":"very mild threat / upsetting scenes, a briefly missing child","imdb":"8.1/10",
+        "award":"Oscar® winner — Best Animated Feature",
+        "synopsis":"Two sisters move to the countryside while their mother is unwell — and discover the nearby woods are alive with shy, gentle spirits. A small family story that turns worry into wonder, with a few tense moments that resolve warmly.",
+        "themes":"Growing up & resilience • sisterhood • moving home • nature as comfort • imagination & wonder • family illness (handled gently) • kindness to the unknown",
+        "ourTake":"A soft, restorative film that takes children’s worries seriously — then answers them with wonder.",
+        "poster":"/assets/posters/my-neighbor-totoro.webp","whereLine":""
+      },
+      "la-la-land": {
+        "title":"La La Land","year":2016,"runtime":"2h 8m","bbfc":"12A","bbfcReason":"","imdb":"8.0/10",
+        "award":"BAFTA — Best Film • Oscar® — Best Directing",
+        "synopsis":"In Los Angeles, a jazz pianist and an aspiring actress fall in love while chasing careers that don’t always fit neatly together. A romantic, music-led story that’s mostly light — with one moment of strong language that pushes the rating up.",
+        "themes":"Dreams vs relationships • ambition & compromise • creativity & craft • “what if?” paths • persistence after setbacks • love that isn’t simple • the price of success",
+        "ourTake":"A joyful musical with a bittersweet honesty: sometimes growing up means choosing — and letting something go.",
+        "poster":"/assets/posters/la-la-land.webp","whereLine":""
+      },
+      "its-a-wonderful-life": {
+        "title":"It’s a Wonderful Life","year":1946,"runtime":"2h 10m","bbfc":"U","bbfcReason":"suicide theme is central but treated sensitively with a reassuring outcome","imdb":"8.6/10",
+        "award":"Oscar® — Best Picture",
+        "synopsis":"On a desperate night, a man who feels he’s failed is shown how many lives he’s changed — and what the world would look like without him. It starts dark, but lands warm, funny, and deeply life-affirming.",
+        "themes":"Self-worth & belonging • kindness and community • money vs values • mental health (handled with hope) • gratitude • family responsibility • the ripple effect of small choices",
+        "ourTake":"Surprisingly tough at the start — but one of the best films for talking about kindness, money, and what “success” really means.",
+        "poster":"/assets/posters/its-a-wonderful-life.webp","whereLine":""
+      },
+      "wall-e": {
+        "title":"WALL·E","year":2008,"runtime":"1h 38m","bbfc":"U","bbfcReason":"very mild threat/violence","imdb":"8.4/10",
+        "award":"BAFTA — Best Animated Film",
+        "synopsis":"Alone on an abandoned Earth, a small waste-collecting robot keeps going — until a sleek new robot arrives and changes his world. A near-silent love story that grows into a funny, hopeful sci-fi adventure about what humans leave behind.",
+        "themes":"Love & connection • loneliness • protecting nature • consumerism and waste • humans + technology • bravery without words • rebuilding a future",
+        "ourTake":"One of the best “first sci-fi” films for kids: simple to follow, rich to talk about afterwards.",
+        "poster":"/assets/posters/wall-e.webp","whereLine":""
+      }
+    };
+
+    function pill(text){
+      const span = document.createElement('span');
+      span.className = 'pill';
+      span.textContent = text;
+      return span;
+    }
+
+    const slug = new URLSearchParams(location.search).get('f');
+    const film = slug ? films[slug] : null;
+
+    const titleEl = document.getElementById('filmTitle');
+    const awardEl = document.getElementById('filmAward');
+    const pillsEl = document.getElementById('filmPills');
+
+    if (!film) {
+      titleEl.textContent = "Film page";
+      pillsEl.appendChild(pill("Beta"));
+      pillsEl.appendChild(pill("Page coming soon"));
+    } else {
+      titleEl.textContent = film.title || "Film";
+      document.title = `Family Film Journal | ${film.title || "Film"}`;
+
+      if (film.award && String(film.award).trim()) {
+        awardEl.style.display = "block";
+        awardEl.textContent = film.award;
+      }
+
+      // Poster
+      if (film.poster) {
+        const posterWrap = document.getElementById('posterWrap');
+        const poster = document.getElementById('filmPoster');
+        posterWrap.style.display = "block";
+        poster.src = film.poster;
+        poster.alt = `${film.title} poster`;
+      }
+
+      // Pills
+      if (film.imdb) pillsEl.appendChild(pill(`IMDb ${film.imdb}`));
+      if (film.year) pillsEl.appendChild(pill(String(film.year)));
+      if (film.runtime) pillsEl.appendChild(pill(film.runtime));
+      if (film.bbfc) pillsEl.appendChild(pill(`BBFC ${film.bbfc}`));
+      if (film.bbfcReason && String(film.bbfcReason).trim()) pillsEl.appendChild(pill(film.bbfcReason));
+
+      // Sections
+      if (film.synopsis) {
+        document.getElementById('synopsisSection').style.display = "block";
+        document.getElementById('filmSynopsis').textContent = film.synopsis;
+      }
+      if (film.themes) {
+        document.getElementById('themesSection').style.display = "block";
+        document.getElementById('filmThemes').textContent = film.themes;
+      }
+      if (film.ourTake) {
+        document.getElementById('takeSection').style.display = "block";
+        document.getElementById('filmTake').textContent = film.ourTake;
+      }
+    }
+  </script>
+</body>
+</html>
