@@ -1048,7 +1048,7 @@ const posterImg = f.poster
 
             return `
               <li class="card"${themeAttr}>
-                <a class="card__link" href="/films/${id}/" aria-label="${escapeHtml(f.title)} (${escapeHtml(String(f.year || ""))})">
+                <a class="card__link" href="film.html?f=${id}" aria-label="${escapeHtml(f.title)} (${escapeHtml(String(f.year || ""))})">
                   <div class="poster">
                     ${posterImg}
                     <div class="peek" role="note" aria-hidden="true">
